@@ -1,6 +1,8 @@
 <?php
 
-namespace 'blog/repository';
+namespace blog\repository;
+
+use ConnectDb;
 
 class userRepository {
     function getUser() {

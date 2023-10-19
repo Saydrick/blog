@@ -1,4 +1,6 @@
 <?php
+
+namespace blog\config;
  
 class ConnectDb {
  
