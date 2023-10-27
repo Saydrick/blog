@@ -1,0 +1,71 @@
+/* BODY */
+
+
+
+.vertical_center {
+    margin: auto;
+}
+
+
+/* HEADER */
+
+
+.header_container {
+    height: 100%;
+    margin-top: 1%;
+    margin-bottom: 1%;
+}
+
+.header_row {
+    height: 100%;
+}
+
+.connexion {
+    background-color: #fff;
+    border: #fff;
+    font-weight: bold;
+}
+
+.inscription {
+    width: auto;
+    height: auto;
+    border-radius: 15px;
+    border: #008090 solid 1px;
+    background-color: #008090;
+    color: black;
+    font-weight: bold;
+}
+
+#header_ul {
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+.header_li {
+    list-style: none;
+    line-height: 40px;
+}
+
+.header_li a {
+    display: block;
+    height: 100%;
+    width: 100%;
+    /* font-size: 0.9rem; */
+    color: black;
+    text-decoration: none;
+    padding: 0 15px;
+    text-transform: uppercase;
+    /* font-weight: 300; */
+}
+
+.header_li :hover {
+    background-color: #008090;
+    border-bottom: black solid 4px;
+}
+
+img.logo {
+    width: 25%;
+    margin-left: 5%;
+    margin-bottom: 1px;
+}

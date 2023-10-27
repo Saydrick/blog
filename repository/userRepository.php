@@ -2,15 +2,19 @@
 
 namespace blog\repository;
 
-use ConnectDb;
+use blog\config\ConnectDb;
+use PDO;
 
 class userRepository {
     function getUser() {
-        
+
         $instance = ConnectDb::getInstance();
         $conn = $instance->getConnection();
 
         $sql = 'SELECT ID_utilisateur, nom, prenom, is_admin FROM utilisateurs';
+        
+        
+        
         $query = $conn->prepare($sql);
         $query->execute();
 
@@ -21,10 +25,14 @@ class userRepository {
                         'nom' => $row['nom'],
                         'prenom' => $row['prenom'],
                         'is_admin' => $row['is_admin']
-                ];  
+                        ];  
+
+
+
+
 
                 $users[] = $user;
         } 
-            return $users[];
+            return $users;
     }
 }

@@ -1,6 +1,8 @@
 <?php
 
 namespace blog\config;
+
+use PDO;
  
 class ConnectDb {
  

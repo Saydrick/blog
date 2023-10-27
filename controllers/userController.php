@@ -2,6 +2,8 @@
 
 namespace blog\controller;
 
+use blog\repository\userRepository;
+
 class userController {
 
     protected userRepository $_userRepository;
