@@ -1,0 +1,28 @@
+<div class="container-fluide">
+    {% for article in article %}
+        {% for commentaire in commentaire %}
+            <div class="row flex">
+                <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3"></div>
+
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <form action="/blog/public/delete-commentaire-confirme/{{ article.id }}-{{ commentaire.id_commentaire }}" method="post">
+                        <div>Etes-vous sûr de vouloir supprimer votre commentaire ?</div>
+                        <br>
+                        <br>
+                        <input type="submit" name="envoyer" value="OUI" />
+                        <input type="button" name="retour" value="NON" onclick="history.back()" />
+                    </form>
+                </div>
+
+                <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3"></div>
+                
+            </div>
+
+            <div class="row flex">
+                {% if result %}
+                    {{ result }}
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% endfor %}
+</div>

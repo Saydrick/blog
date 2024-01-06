@@ -1,0 +1,27 @@
+<div class="container-fluide">
+    <div class="row flex">
+        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3"></div>
+
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <form action="/blog/public/add-post-confirme" method="post">
+                <input type="text" name="titre" value="" placeholder="Titre de l'article" require/>
+                <br />
+                <input type="text" name="chapo" value="" placeholder="Aperçu de l'article (facultatif)"/>
+                <br />
+                <textarea name="contenu" cols="40" rows="20" wrap="soft" 
+                                        placeholder="Article" required></textarea>
+                <br />
+                <input type="submit" name="envoyer" value="Valider" />
+            </form>
+        </div>
+
+        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3"></div>
+        
+    </div>
+
+    <div class="row flex">
+        {% if result %}
+            {{ result }}
+        {% endif %}
+    </div>
+</div>

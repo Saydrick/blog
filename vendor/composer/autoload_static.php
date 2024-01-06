@@ -12,6 +12,10 @@ class ComposerStaticInitfddbc3e909eca1e357418568a5943168
     );
 
     public static $prefixLengthsPsr4 = array (
+        'b' => 
+        array (
+            'blog\\' => 5,
+        ),
         'T' => 
         array (
             'Twig\\' => 5,
@@ -21,9 +25,18 @@ class ComposerStaticInitfddbc3e909eca1e357418568a5943168
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Polyfill\\Ctype\\' => 23,
         ),
+        'P' => 
+        array (
+            'PHPMailer\\PHPMailer\\' => 20,
+            'PHPMailer\\' => 10,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
+        'blog\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/',
+        ),
         'Twig\\' => 
         array (
             0 => __DIR__ . '/..' . '/twig/twig/src',
@@ -35,6 +48,14 @@ class ComposerStaticInitfddbc3e909eca1e357418568a5943168
         'Symfony\\Polyfill\\Ctype\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-ctype',
+        ),
+        'PHPMailer\\PHPMailer\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
+        ),
+        'PHPMailer\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
         ),
     );
 

@@ -1,0 +1,92 @@
+<div class="container-fluide">
+    {% for article in articles %}
+        <div class="row flex center">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <h2>Voici l'article n°{{ article.id }}</h2>
+                <br>
+                {% if article.id_auteur == session %}
+                    <a href="/blog/public/modify-post/{{ article.id }}">
+                        <button>Modifier cet article</button>
+                    </a><br><br>
+                    <a href="/blog/public/delete-post/{{ article.id }}">
+                        <button>Supprimer cet article</button>
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <br>
+        <br>
+
+        <div class="row flex">
+            <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3"></div>
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                <p>{{ article.titre }}</p>
+                <p>{{ article.chapo }}</p>
+                <p>{{ article.contenu }}</p>
+                <p>{{ article.date_creation }}</p>
+                <p>{{ article.date_modification }}</p>
+                <p>{{ article.auteur }}</p>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3"></div>
+            
+        </div>
+
+        {% if session != NULL %}
+            <br><br><br><br>
+            <div class="row flex">
+                <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3"></div>
+                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        <h4>Laissez-nous votre avis sur cet article</h4>
+                        <form action="/blog/public/add-commentaire/{{ article.id }}" method="post">
+                            <textarea name="commentaire" cols="100" rows="3" wrap="soft" required></textarea>
+                            <br />
+                        <input type="submit" name="envoyer" value="Publier" />
+                    </form>
+                            
+
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3"></div>
+            </div>
+        {% endif %}
+
+        <br>
+        <br>
+
+        <div class="row flex">
+            <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3"></div>
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                {% if commentaires is iterable %}
+                    {% for commentaire in commentaires %}
+                        <p>{{ commentaire.id_commentaire }}</p>
+                        <p>{{ commentaire.date_creation }}</p>
+                        <p>{{ commentaire.date_modification }}</p>
+                        <p>{{ commentaire.message }}</p>
+                        <p>{{ commentaire.auteur }}</p>
+                        <p>{{ commentaire.id_auteur }}</p>
+                        <br>
+                        {% if commentaire.id_auteur == session_id %}
+                            <a href="/blog/public/modify-commentaire/{{ article.id }}-{{ commentaire.id_commentaire }}">
+                                <button>Modifier</button>
+                            </a><br>
+                            <a href="/blog/public/delete-commentaire/{{ article.id }}-{{ commentaire.id_commentaire }}">
+                                <button>Supprimer</button>
+                            </a>
+                        {% endif %}
+                    {% endfor %}    
+
+                {% else %}
+                    {% if session_id != NULL %}
+                        <p>{{ commentaires }}</p>
+                    {% endif %}
+                {% endif %}
+                <hr>
+            </div>
+            
+            <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3"></div>
+            
+        </div>
+
+    {% endfor %}
+</div>
+

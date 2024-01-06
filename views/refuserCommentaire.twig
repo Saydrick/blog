@@ -1,0 +1,36 @@
+<div class="container-fluide">
+    <div class="row flex">
+        <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+            {% for article in article %}
+                <form action="/blog/public/admin/refuserCommentaire-confirme/{{ commentaire }}" method="post">
+                    <h4>Etes-vous sûr de vouloir supprimer ce commentaire ?</h4>
+                    
+                    <br>
+
+                    {# affichage du commentaire #}
+                    <div class="border">
+                        <p>{{ article.message }}</p>
+                    </div>
+
+                    <br>
+
+                    <label for="message">Motif :</label>
+                    <textarea id="Motif" name="Motif" cols="40" rows="5" wrap="soft" placeholder="Motif" required></textarea>
+
+                    <input type="submit" name="envoyer" value="OUI" />
+                    <input type="button" name="retour" value="NON" onclick="history.back()" />
+
+                </form>
+            {% endfor %}
+            
+            {% if result is defined %}
+                <h3>{{ result }}</h3>
+            {% endif %}
+            
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+        </div>
+    </div>
+</div>

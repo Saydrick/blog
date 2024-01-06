@@ -1,4 +1,43 @@
+<div class="container-fluide">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="row flex center">
+            <h2>Les articles récents</h2>
+        </div>
+    </div>
 
-{% for param in params %}
-    {{ param.titre }}
-{% endfor %}
+    <br>
+        <h3>{{ session }}</h3>
+    <br>
+
+    {% for param in params %}
+        <div class="row flex">
+            <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3"></div>
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                <p><span id="titre">{{ param.titre }}</span>
+                {% if param.date_modification == param.date_creation %}
+                    <span id="post_modifie">&emsp; Modifié le {{ param.date_modification }}</span>
+                {% endif %}
+                </p>
+
+                <p>{{ param.chapo }}</p>
+                {# <a id="lire_la_suite" href="/blog/public/post/[i:id]={{ param.id }}">Lire la suite</a> #}
+                <a id="lire_la_suite" href="/blog/public/post/{{ param.id }}">Lire la suite</a>
+                <p>par <span id="auteur">{{ param.auteur }}</span> le {{ param.date_creation }}</p>
+
+                <br>
+
+                <hr id="hr_post">
+
+                <br>
+                
+                    
+
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3"></div>
+            
+        </div>
+    {% endfor %}
+</div>
+
+
+
