@@ -24,13 +24,12 @@
                    {% if session_admin != NULL %}
                         <a class="administrateur" href="/blog/public/admin">Administrateur</a>
                     {% endif %}
-                    <a class="deconnexion" href="/blog/public/deconnexion">Deconnexion</a>
+                    <a class="deconnexion" href="/blog/public/signOut">Deconnexion</a>
                 {% else %}
-                    <a class="connexion" href="/blog/public/connexion">Connexion</a>
-                    <a class="inscription" href="/blog/public/inscription">Inscription</a> 
+                    <a class="connexion" href="/blog/public/login">Connexion</a>
+                    <a class="inscription" href="/blog/public/register">Inscription</a> 
                 {% endif %} 
             </div>            
         </div>
     </div>
 </header>
-{# <hr> #}

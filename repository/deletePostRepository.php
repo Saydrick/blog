@@ -4,7 +4,6 @@ namespace blog\repository;
 
 use blog\config\ConnectDb;
 use Exception;
-use PDO;
 
 class deletePostRepository {
     public static function deletePost($id) {
@@ -15,10 +14,7 @@ class deletePostRepository {
         $query = $conn->prepare("DELETE FROM posts
                                 WHERE ID_post = :id");
 
-        // Liez les valeurs aux marqueurs de paramètres
         $query->bindValue(':id', $id);
-
-        var_dump($query);
 
         if ($query->execute())
         {
@@ -26,10 +22,10 @@ class deletePostRepository {
         }
         else
         {
-            $erreur = "Une erreur est survenue \n";
-            $erreur .= "Veuillez réessayer";
+            $error = "Une erreur est survenue \n";
+            $error .= "Veuillez réessayer";
 
-            throw new Exception($erreur);
+            throw new Exception($error);
         }
 
     }

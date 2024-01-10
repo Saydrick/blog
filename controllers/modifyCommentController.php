@@ -2,21 +2,21 @@
 
 namespace blog\controllers;
 
-use blog\repository\modifyCommentaireRepository;
+use blog\repository\modifyCommentRepository;
 use blog\service\validateService;
 use blog\Exceptions\Exception;
 
-class modifyCommentaireController {
+class modifyCommentController {
 
-    protected modifyCommentaireRepository $_modifyCommentaireRepository;
+    protected modifyCommentRepository $_modifyCommentRepository;
     protected validateService $_validateService;
 
-    function __construct(modifyCommentaireRepository $modifyCommentaireRepository, validateService $validateService) {
-        $this->_modifyCommentaireRepository = $modifyCommentaireRepository;
+    function __construct(modifyCommentRepository $modifyCommentRepository, validateService $validateService) {
+        $this->_modifyCommentRepository = $modifyCommentRepository;
         $this->_validateService = $validateService;
     }
 
-    function update($id_commentaire, $id_post) {
+    function update($id_comment, $id_post) {
         try {
             if(isset($_POST['envoyer'])) {
 
@@ -26,9 +26,9 @@ class modifyCommentaireController {
             
                 $this->_validateService->formValidate($_POST, $formRules);
 
-                $commentaire = $_POST['commentaire']; 
+                $comment = $_POST['commentaire']; 
 
-                $result = $this->_modifyCommentaireRepository->modifyCommentaire($id_commentaire, $id_post, $commentaire);      
+                $result = $this->_modifyCommentRepository->modifyComment($id_comment, $id_post, $comment);      
 
                 header("Location: /blog/public/post/" . $result);
                 exit;                       

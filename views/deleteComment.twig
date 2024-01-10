@@ -1,11 +1,11 @@
 <div class="container-fluide">
-    {% for article in article %}
-        {% for commentaire in commentaire %}
+    {% for post in post %}
+        {% for comment in comment %}
             <div class="row flex">
                 <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3"></div>
 
                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                    <form action="/blog/public/delete-commentaire-confirme/{{ article.id }}-{{ commentaire.id_commentaire }}" method="post">
+                    <form action="/blog/public/delete-comment-confirm/{{ post.id }}-{{ comment.id_comment }}" method="post">
                         <div>Etes-vous sûr de vouloir supprimer votre commentaire ?</div>
                         <br>
                         <br>

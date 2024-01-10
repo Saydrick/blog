@@ -1,0 +1,42 @@
+<div class="container-fluide">
+    {% if session_admin != NULL %}
+        {% for post in posts %}
+            <div class="row flex">
+                <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3"></div>
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <a href="/blog/public/post/{{ post.id }}">{{ post.titre }}</a>
+                        {% for comment in comments %}
+                            {% if comment.id_post == post.id %}
+                                <div class="row flex">
+                                    <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1"></div>
+                                    <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+
+                                        <p>par <span id="auteur">{{ comment.auteur }}</span> le {{ comment.date_modification }}</p>
+                                        <p>{{ comment.message }}</p>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
+                                        <button class="admin_img"><a href="/blog/public/admin/validateComment/{{ comment.id_commentaire }}"><img src="/blog/views/Component/img/validation.png" alt="Valider ce commentaire"></a></button>
+                                    </div>
+
+                                    <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
+                                        <button class="admin_img"><a href="/blog/public/admin/denyComment/{{ comment.id_commentaire }}"><img src="/blog/views/Component/img/refus.png" alt="Refuser ce commentaire"></a></button>
+                                    </div>
+
+                                </div>
+                                <hr>
+
+                            {% endif %}
+                        {% endfor %}
+                
+                </div>
+            </div>
+        {% endfor %}
+
+    {% else %}
+        <h3>Vous n'êtes pas administrateur sur le site</h3>
+        <br>
+        <button><a href="/blog/public/">Accueil</a></button>
+    {% endif %}  
+
+
+</div>

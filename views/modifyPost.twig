@@ -1,15 +1,15 @@
 <div class="container-fluide">
-    {% for param in params %}
+    {% for post in posts %}
         <div class="row flex">
             <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3"></div>
 
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                <form action="/blog/public/modify-post-confirme/{{ param.id }}" method="post">
-                    <input type="text" name="titre" value="{{ param.titre }}" require/>
+                <form action="/blog/public/modify-post-confirm/{{ post.id }}" method="post">
+                    <input type="text" name="titre" value="{{ post.titre }}" require/>
                     <br />
-                    <input type="text" name="chapo" value="{{ param.chapo }}"/>
+                    <input type="text" name="chapo" value="{{ post.chapo }}"/>
                     <br />
-                    <textarea name="contenu" cols="40" rows="20" wrap="soft" required>{{ param.contenu }}</textarea>
+                    <textarea name="contenu" cols="40" rows="20" wrap="soft" required>{{ post.contenu }}</textarea>
                     <br />
                     <input type="submit" name="envoyer" value="Valider" />
                 </form>

@@ -2,17 +2,17 @@
 
 namespace blog\controllers;
 
-use blog\repository\addCommentaireRepository;
+use blog\repository\addCommentRepository;
 use blog\service\validateService;
 use blog\Exceptions\Exception;
 
-class addCommentaireController {
+class addCommentController {
 
-    protected addCommentaireRepository $_addCommentaireRepository;
+    protected addCommentRepository $_addCommentRepository;
     protected validateService $_validateService;
 
-    function __construct(addCommentaireRepository $addCommentaireRepository, validateService $validateService) {
-        $this->_addCommentaireRepository = $addCommentaireRepository;
+    function __construct(addCommentRepository $addCommentRepository, validateService $validateService) {
+        $this->_addCommentRepository = $addCommentRepository;
         $this->_validateService = $validateService;
     }
 
@@ -26,9 +26,9 @@ class addCommentaireController {
             
                 $this->_validateService->formValidate($_POST, $formRules);
 
-                $commentaire = $_POST['commentaire'];
+                $comment = $_POST['commentaire'];
 
-                $result = $this->_addCommentaireRepository->addCommentaire($commentaire, $id_post);      
+                $result = $this->_addCommentRepository->addComment($comment, $id_post);      
 
                 header("Location: /blog/public/post/" . $result);
                 exit;                       

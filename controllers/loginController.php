@@ -2,17 +2,17 @@
 
 namespace blog\controllers;
 
-use blog\repository\connexionRepository;
+use blog\repository\loginRepository;
 use blog\service\validateService;
 use blog\Exceptions\Exception;
 
-class connexionController {
+class loginController {
 
-    protected connexionRepository $_connexionRepository;
+    protected loginRepository $_loginRepository;
     protected validateService $_validateService;
 
-    function __construct(connexionRepository $connexionRepository, validateService $validateService) {
-        $this->_connexionRepository = $connexionRepository;
+    function __construct(loginRepository $loginRepository, validateService $validateService) {
+        $this->_loginRepository = $loginRepository;
         $this->_validateService = $validateService;
     }
 
@@ -31,7 +31,7 @@ class connexionController {
                 $email = $_POST['mail'];
                 $password = $_POST['password'];
                 
-                $user = $this->_connexionRepository->checkUser($email, $password);
+                $user = $this->_loginRepository->checkUser($email, $password);
 
                 if(is_array($user))
                 {
@@ -53,7 +53,7 @@ class connexionController {
             }
         }
 
-        return $result; // Renvoyer la vues
+        return $result;
 
     }
 }

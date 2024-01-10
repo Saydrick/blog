@@ -7,8 +7,8 @@ use blog\enum\Is_checked;
 use Exception;
 use PDO;
 
-class validerCommentaireRepository {
-    public static function validerCommentaire($id_commentaire) {
+class validateCommentRepository {
+    public static function validateComment($id_comment) {
 
         $instance = ConnectDb::getInstance();
         $conn = $instance->getConnection();
@@ -18,7 +18,7 @@ class validerCommentaireRepository {
                                 WHERE ID_Commentaire = :id");
 
         // Liez les valeurs aux marqueurs de paramètres
-        $query->bindValue(':id', $id_commentaire);
+        $query->bindValue(':id', $id_comment);
         $query->bindValue(':is_checked', Is_checked::checked->value);
 
         // var_dump($query);
@@ -29,10 +29,10 @@ class validerCommentaireRepository {
         }
         else
         {
-            $erreur = "Une erreur est survenue \n";
-            $erreur .= "Veuillez réessayer";
+            $error = "Une erreur est survenue \n";
+            $error .= "Veuillez réessayer";
 
-            throw new Exception($erreur);
+            throw new Exception($error);
         }
 
     }

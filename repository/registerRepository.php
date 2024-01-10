@@ -6,7 +6,7 @@ use blog\config\ConnectDb;
 use blog\enum\Status;
 use PDO;
 
-class inscriptionRepository {
+class registerRepository {
     public function newUser($nom, $prenom, $email, $password) {
 
         $instance = ConnectDb::getInstance();
@@ -37,8 +37,6 @@ class inscriptionRepository {
             }
         }
 
-
-        // return 'coucou';
         return $result;
     }
 }

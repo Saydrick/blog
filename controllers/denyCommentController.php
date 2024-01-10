@@ -1,9 +1,9 @@
 <?php
 
+/* TODO */
 namespace blog\controllers;
 
 use blog\repository\validerCommentaireRepository;
-use blog\service\validateService;
 use blog\Exceptions\Exception;
 
 class validerCommentaireController {

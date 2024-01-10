@@ -6,7 +6,7 @@ use blog\config\ConnectDb;
 use Exception;
 use PDO;
 
-class connexionRepository {
+class loginRepository {
     public function checkUser($email, $password) {
 
         try {
@@ -47,7 +47,6 @@ class connexionRepository {
             }
         }
         catch(Exception $e){
-            // throw new Exception($e->getMessage());
             $result = 'Erreur : ' . $e->getMessage();
             return $result;
         }

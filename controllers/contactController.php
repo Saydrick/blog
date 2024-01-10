@@ -3,7 +3,6 @@
 namespace blog\controllers;
 
 use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
 use blog\service\validateService;
 use PHPMailer\PHPMailer\Exception;
 
@@ -12,9 +11,11 @@ require_once('../config/requireLoader.php');
 class contactController {
 
     protected $PHPMailer;
+    protected validateService $_validateService;
 
-    function __construct(PHPMailer $PHPMailer) {
+    function __construct(PHPMailer $PHPMailer, validateService $validateService) {
         $this->PHPMailer = $PHPMailer; 
+        $this->_validateService = $validateService;
     }
 
     function index() {
@@ -42,7 +43,7 @@ class contactController {
                     'message' => ['type' => 'required', 'message' => 'Veuillez renseigner votre message']
                 ];
             
-                validateService::formValidate($_POST, $formRules);
+                $this->_validateService->formValidate($_POST, $formRules);
 
                 $nom = $_POST['nom'];
                 $prenom = $_POST['prenom'];

@@ -7,8 +7,8 @@ use blog\helper\helper;
 use blog\enum\Is_checked;
 use PDO;
 
-class commentaireRepository {
-    public static function getAllCommentaire($id_post) {
+class commentRepository {
+    public static function getAllComment($id_post) {
 
         $instance = ConnectDb::getInstance();
         $conn = $instance->getConnection();
@@ -34,7 +34,7 @@ class commentaireRepository {
                 $date_creation = helper::dateFormat($row['date_creation']);
                 $date_modification = helper::dateFormat($row['date_modification']);
         
-                $commentaire = [
+                $comment = [
                         'id_commentaire' => $row['ID_commentaire'],
                         'date_creation' => $date_creation,
                         'date_modification' => $date_modification,
@@ -43,19 +43,19 @@ class commentaireRepository {
                         'id_auteur' => $row['ID_utilisateur']
                         ];  
     
-                $commentaires[] = $commentaire;
+                $comments[] = $comment;
             }
         }
         else 
         {
-            $commentaires = 'Soyez le premier à commenter cet article';
+            $comments = 'Soyez le premier à commenter cet article';
         }
 
-        return $commentaires;
+        return $comments;
     }
 
 
-    public static function getCommentaire($id_commentaire) {
+    public static function getComment($id_comment) {
 
         $instance = ConnectDb::getInstance();
         $conn = $instance->getConnection();
@@ -63,10 +63,10 @@ class commentaireRepository {
         $query = $conn->prepare("SELECT commentaires.ID_commentaire, commentaires.date_creation, commentaires.date_modification, commentaires.message, commentaires.ID_utilisateur, utilisateurs.nom, utilisateurs.prenom
                                 FROM commentaires
                                 INNER JOIN utilisateurs ON (utilisateurs.ID_utilisateur = commentaires.ID_utilisateur)
-                                WHERE commentaires.ID_commentaire = :id_commentaire");
+                                WHERE commentaires.ID_commentaire = :id_comment");
 
         
-        $query->bindValue(':id_commentaire', $id_commentaire);
+        $query->bindValue(':id_comment', $id_comment);
 
         $query->execute();
 
@@ -75,7 +75,7 @@ class commentaireRepository {
             $date_creation = helper::dateFormat($row['date_creation']);
             $date_modification = helper::dateFormat($row['date_modification']);
     
-            $commentaire = [
+            $comment = [
                     'id_commentaire' => $row['ID_commentaire'],
                     'date_creation' => $date_creation,
                     'date_modification' => $date_modification,
@@ -84,10 +84,10 @@ class commentaireRepository {
                     'id_auteur' => $row['ID_utilisateur']
                     ];  
 
-            $commentaires[] = $commentaire;
+            $comments[] = $comment;
         }
 
-        return $commentaires;
+        return $comments;
     }
 }
 

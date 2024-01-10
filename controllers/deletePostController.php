@@ -9,11 +9,9 @@ use blog\Exceptions\Exception;
 class deletePostController {
 
     protected deletePostRepository $_deletePostRepository;
-    protected validateService $_validateService;
 
-    function __construct(deletePostRepository $deletePostRepository, validateService $validateService) {
+    function __construct(deletePostRepository $deletePostRepository) {
         $this->_deletePostRepository = $deletePostRepository;
-        $this->_validateService = $validateService;
     }
 
     function delete($id) {

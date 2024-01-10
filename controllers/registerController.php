@@ -2,16 +2,18 @@
 
 namespace blog\controllers;
 
-use blog\repository\inscriptionRepository;
+use blog\repository\registerRepository;
 use blog\service\validateService;
 use blog\Exceptions\Exception;
 
-class inscriptionController {
+class registerController {
 
-    protected inscriptionRepository $_inscriptionRepository;
+    protected registerRepository $_registerRepository;
+    protected validateService $_validateService;
 
-    function __construct(inscriptionRepository $inscriptionRepository) {
-        $this->_inscriptionRepository = $inscriptionRepository;
+    function __construct(registerRepository $registerRepository, validateService $validateService) {
+        $this->_registerRepository = $registerRepository;
+        $this->_validateService = $validateService;
     }
 
     function create() {
@@ -20,7 +22,6 @@ class inscriptionController {
             if(isset($_POST['envoyer'])) {
 
                 $formRules = [
-                    // 'envoyer' => ['type' => 'required', 'message' => 'Veuillez cliquer sur "Envoyer"'],
                     'nom' => ['type' => 'required', 'message' => 'Veuillez renseigner votre nom'],
                     'prenom' => ['type' => 'required', 'message' => 'Veuillez renseigner votre prénom'],
                     'mail' => ['type' => 'email', 'message' => 'L\'adresse mail entrée est incorrecte'],
@@ -28,14 +29,14 @@ class inscriptionController {
                     'confirm_password' => ['type' => 'confirm_password', 'fieldToConfirm' => 'password', 'message' => 'Les mots de passe ne correspondent pas']
                 ];
             
-                validateService::formValidate($_POST, $formRules);
+                $this->_validateService->formValidate($_POST, $formRules);
 
                 $nom = $_POST['nom']; 
                 $prenom = $_POST['prenom'];
                 $email = $_POST['mail'];
                 $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
 
-                $result = $this->_inscriptionRepository->newUser($nom, $prenom, $email, $password);
+                $result = $this->_registerRepository->newUser($nom, $prenom, $email, $password);
 
                 
                              

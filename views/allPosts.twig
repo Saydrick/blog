@@ -9,20 +9,20 @@
         <h3>{{ session }}</h3>
     <br>
 
-    {% for param in params %}
+    {% for post in posts %}
         <div class="row flex">
             <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3"></div>
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                <p><span id="titre">{{ param.titre }}</span>
-                {% if param.date_modification == param.date_creation %}
-                    <span id="post_modifie">&emsp; Modifié le {{ param.date_modification }}</span>
+                <p><span id="titre">{{ post.titre }}</span>
+                {% if post.date_modification == post.date_creation %}
+                    <span id="post_modifie">&emsp; Modifié le {{ post.date_modification }}</span>
                 {% endif %}
                 </p>
 
-                <p>{{ param.chapo }}</p>
-                {# <a id="lire_la_suite" href="/blog/public/post/[i:id]={{ param.id }}">Lire la suite</a> #}
-                <a id="lire_la_suite" href="/blog/public/post/{{ param.id }}">Lire la suite</a>
-                <p>par <span id="auteur">{{ param.auteur }}</span> le {{ param.date_creation }}</p>
+                <p>{{ post.chapo }}</p>
+                {# <a id="lire_la_suite" href="/blog/public/post/[i:id]={{ post.id }}">Lire la suite</a> #}
+                <a id="lire_la_suite" href="/blog/public/post/{{ post.id }}">Lire la suite</a>
+                <p>par <span id="auteur">{{ post.auteur }}</span> le {{ post.date_creation }}</p>
 
                 <br>
 

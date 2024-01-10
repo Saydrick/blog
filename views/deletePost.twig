@@ -1,14 +1,14 @@
 <div class="container-fluide">
-    {% for param in params %}
+    {% for post in posts %}
         <div class="row flex">
             <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3"></div>
 
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                <form action="/blog/public/delete-post-confirme/{{ param.id }}" method="post">
+                <form action="/blog/public/delete-post-confirm/{{ post.id }}" method="post">
                     <div>Etes-vous sûr de vouloir supprimer cet article ?</div>
                     <br>
                     <br>
-                    <div><b>{{ param.titre }}</b></div>
+                    <div><b>{{ post.titre }}</b></div>
                     <br>
                     <br>
                     <input type="submit" name="envoyer" value="OUI" />

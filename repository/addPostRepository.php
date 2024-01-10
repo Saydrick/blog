@@ -33,10 +33,10 @@ class addPostRepository {
         }
         else
         {
-            $erreur = "Une erreur est survenue \n";
-            $erreur .= "Veuillez réessayer";
+            $error = "Une erreur est survenue \n";
+            $error .= "Veuillez réessayer";
 
-            throw new Exception($erreur);
+            throw new Exception($error);
         }
 
     }

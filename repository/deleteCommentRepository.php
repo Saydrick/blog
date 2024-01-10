@@ -4,10 +4,9 @@ namespace blog\repository;
 
 use blog\config\ConnectDb;
 use Exception;
-use PDO;
 
-class deletecommentaireRepository {
-    public static function deletecommentaire($id_post, $id_commentaire) {
+class deleteCommentRepository {
+    public static function deleteComment($id_post, $id_comment) {
 
         $instance = ConnectDb::getInstance();
         $conn = $instance->getConnection();
@@ -16,7 +15,7 @@ class deletecommentaireRepository {
                                 WHERE ID_commentaire = :id");
 
         // Liez les valeurs aux marqueurs de paramètres
-        $query->bindValue(':id', $id_commentaire);
+        $query->bindValue(':id', $id_comment);
 
         var_dump($query);
 
@@ -26,10 +25,10 @@ class deletecommentaireRepository {
         }
         else
         {
-            $erreur = "Une erreur est survenue \n";
-            $erreur .= "Veuillez réessayer";
+            $error = "Une erreur est survenue \n";
+            $error .= "Veuillez réessayer";
 
-            throw new Exception($erreur);
+            throw new Exception($error);
         }
 
     }

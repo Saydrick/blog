@@ -7,7 +7,7 @@ use blog\enum\Is_checked;
 use blog\helper\helper;
 use PDO;
 
-class administrateurRepository {
+class administratorRepository {
     public static function getPosts() {
 
         $instance = ConnectDb::getInstance();
@@ -47,7 +47,7 @@ class administrateurRepository {
     }
 
 
-    public static function getCommentaires() {
+    public static function getComments() {
 
         $instance = ConnectDb::getInstance();
         $conn = $instance->getConnection();
@@ -62,12 +62,12 @@ class administrateurRepository {
 
         $query->execute();
 
-        $commentaires = [];
+        $comments = [];
         while ($row = $query->fetch(PDO::FETCH_ASSOC)) 
         {  
             $date_modification = helper::dateFormat($row['date_modification']);
 
-            $commentaire = [
+            $comment = [
                     'id_post' => $row['ID_post'],
                     'id_commentaire' => $row['ID_commentaire'],
                     'date_modification' => $date_modification,
@@ -75,10 +75,10 @@ class administrateurRepository {
                     'auteur' => $row['nom'] . " " . $row['prenom']
                     ];  
 
-            $commentaires[] = $commentaire;
+            $comments[] = $comment;
         } 
            
-        return $commentaires;
+        return $comments;
         
     }
 }
