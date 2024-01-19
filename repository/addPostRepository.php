@@ -16,12 +16,12 @@ class addPostRepository {
                                 VALUES (:titre, :date_creation, :date_modification, :chapo, :contenu, :user_id)");
 
         // Liez les valeurs aux marqueurs de paramètres
-        $query->bindValue(':titre', $titre);
+        $query->bindValue(':titre', $titre, PDO::PARAM_STR);
         $query->bindValue(':date_creation', date('Y-m-d'));
         $query->bindValue(':date_modification', date('Y-m-d'));
-        $query->bindValue(':chapo', $chapo);
-        $query->bindValue(':contenu', $contenu);
-        $query->bindValue(':user_id', $_SESSION['USER_ID']);
+        $query->bindValue(':chapo', $chapo, PDO::PARAM_STR);
+        $query->bindValue(':contenu', $contenu, PDO::PARAM_STR);
+        $query->bindValue(':user_id', $_SESSION['USER_ID'], PDO::PARAM_INT);
 
         var_dump($query);
 

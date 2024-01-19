@@ -20,6 +20,15 @@ class addPostController {
         try {
             if(isset($_POST['envoyer'])) {
 
+                // If token is not difined OR if post token is different from the session token
+                if (!$_POST['token'] || $_POST['token'] !== $_SESSION['TOKEN']) {
+                    // show an error message
+                    echo '<p class="error">Error: invalid form submission</p>';
+                    // return 405 http status code
+                    header($_SERVER['SERVER_PROTOCOL'] . ' 405 Method Not Allowed');
+                    exit;
+                }
+
                 $formRules = [
                     'titre' => ['type' => 'required', 'message' => 'Veuillez renseigner le titre de l\'article'],
                     'contenu' => ['type' => 'required', 'message' => 'Veuillez renseigner le contenu de l\'article']
@@ -29,15 +38,16 @@ class addPostController {
 
                 if ($_POST['chapo'] == '')
                 {
-                    $chapo = substr($_POST['contenu'], 0, 30);
+                    $content = strip_tags($_POST['contenu']);
+                    $chapo = substr($content, 0, 100);
                 }
                 else
                 {
-                    $chapo = $_POST['chapo']; 
+                    $chapo = strip_tags($_POST['chapo']); 
                 }
 
-                $titre = $_POST['titre']; 
-                $contenu = $_POST['contenu']; 
+                $titre = strip_tags($_POST['titre']); 
+                $contenu = nl2br(strip_tags($_POST['contenu'])); 
 
                 $result = $this->_addPostRepository->addPost($titre, $chapo, $contenu);      
 

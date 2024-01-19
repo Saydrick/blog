@@ -14,7 +14,8 @@ class allPostsRepository {
 
         $query = $conn->prepare("SELECT posts.ID_post, posts.titre, posts.date_creation, posts.date_modification, posts.chapo, posts.contenu, utilisateurs.nom, utilisateurs.prenom
                                 FROM posts
-                                INNER JOIN utilisateurs ON (utilisateurs.ID_utilisateur = posts.ID_utilisateur)");
+                                INNER JOIN utilisateurs ON (utilisateurs.ID_utilisateur = posts.ID_utilisateur)
+                                ORDER BY posts.date_modification DESC");
         $query->execute();
 
         $posts = [];

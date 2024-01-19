@@ -15,7 +15,10 @@ class connexionRepository {
 
             $query = $conn->prepare("SELECT ID_utilisateur, nom, prenom, is_admin, password
                                     FROM utilisateurs
-                                    WHERE email = '$email'");
+                                    WHERE email = :email");
+
+            $query->bindValue(':email', $email, PDO::PARAM_STR);
+
             $query->execute();
 
             $res = $query->fetch(PDO::FETCH_ASSOC);

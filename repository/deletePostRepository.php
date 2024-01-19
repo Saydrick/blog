@@ -4,6 +4,7 @@ namespace blog\repository;
 
 use blog\config\ConnectDb;
 use Exception;
+use PDO;
 
 class deletePostRepository {
     public static function deletePost($id) {
@@ -14,7 +15,7 @@ class deletePostRepository {
         $query = $conn->prepare("DELETE FROM posts
                                 WHERE ID_post = :id");
 
-        $query->bindValue(':id', $id);
+        $query->bindValue(':id', $id, PDO::PARAM_INT);
 
         if ($query->execute())
         {

@@ -5,9 +5,10 @@
 
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <form action="/blog/public/modify-post-confirm/{{ post.id }}" method="post">
-                    <input type="text" name="titre" value="{{ post.titre }}" require/>
+                    <input type="hidden" name="token" value="{{session_token}}">
+                    <input type="text" name="titre" maxlength="100" value="{{ post.titre }}" require/>
                     <br />
-                    <input type="text" name="chapo" value="{{ post.chapo }}"/>
+                    <input type="text" name="chapo" maxlength="250" value="{{ post.chapo }}"/>
                     <br />
                     <textarea name="contenu" cols="40" rows="20" wrap="soft" required>{{ post.contenu }}</textarea>
                     <br />

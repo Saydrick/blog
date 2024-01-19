@@ -3,24 +3,28 @@
         <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
         </div>
         <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
-            {% for comment in comment %}
-                <form action="/blog/public/admin/denyComment-confirm/{{ comment }}" method="post">
+            {% for comment in comments %}
+                <form action="/blog/public/admin/denyComment-confirm/{{ comment.id_commentaire }}-{{ comment.id_auteur }}" method="post">
+                    <input type="hidden" name="token" value="{{session_token}}">
                     <h4>Etes-vous sûr de vouloir supprimer ce commentaire ?</h4>
                     
                     <br>
-
-                    {# Comment display #}
-                    <div class="border">
-                        <p>{{ comment.message }}</p>
-                    </div>
-
                     <br>
 
-                    <label for="message">Motif :</label>
-                    <textarea id="Motif" name="Motif" cols="40" rows="5" wrap="soft" placeholder="Motif" required></textarea>
+                    {# Comment display #}
+                    <blockquote>
+                        <p id="denyComment"><q> {{ comment.message }} </q></p>
+                        <p class="autor">Par {{ comment.auteur }}</p>
+                    </blockquote>
 
-                    <input type="submit" name="envoyer" value="OUI" />
-                    <input type="button" name="retour" value="NON" onclick="history.back()" />
+                    <br>
+                    <br>
+
+                    <label for="motif">Motif :</label>
+                    <textarea id="motif" name="motif" cols="40" rows="5" wrap="soft" placeholder="Motif" required></textarea>
+
+                    <button type="submit" name="envoyer">OUI</button>
+                    <button type="button" name="retour" onclick="history.back()">NON</button>
 
                 </form>
             {% endfor %}

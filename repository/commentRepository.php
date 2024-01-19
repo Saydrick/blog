@@ -22,11 +22,12 @@ class commentRepository {
                                 ORDER BY commentaires.date_modification DESC");
 
         
-        $query->bindValue(':id_post', $id_post);
+        $query->bindValue(':id_post', $id_post, PDO::PARAM_INT);
         $query->bindValue(':is_checked', Is_checked::checked->value);
 
         $query->execute();
 
+        $comments = [];
         if($query->rowCount() > 0)
         {
             while($row = $query->fetch(PDO::FETCH_ASSOC))
@@ -66,10 +67,11 @@ class commentRepository {
                                 WHERE commentaires.ID_commentaire = :id_comment");
 
         
-        $query->bindValue(':id_comment', $id_comment);
+        $query->bindValue(':id_comment', $id_comment, PDO::PARAM_INT);
 
         $query->execute();
 
+        $comments = [];
         while($row = $query->fetch(PDO::FETCH_ASSOC))
         {
             $date_creation = helper::dateFormat($row['date_creation']);
@@ -87,6 +89,7 @@ class commentRepository {
             $comments[] = $comment;
         }
 
+        // var_dump($comments);
         return $comments;
     }
 }

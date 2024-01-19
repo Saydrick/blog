@@ -4,9 +4,10 @@
 
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
             <form action="/blog/public/add-post-confirm" method="post">
-                <input type="text" name="titre" value="" placeholder="Titre de l'article" require/>
+                <input type="hidden" name="token" value="{{session_token}}">
+                <input type="text" name="titre" value="" maxlength="100" placeholder="Titre de l'article" require/>
                 <br />
-                <input type="text" name="chapo" value="" placeholder="Aperçu de l'article (facultatif)"/>
+                <input type="text" name="chapo" value="" maxlength="250" placeholder="Aperçu de l'article (facultatif)"/>
                 <br />
                 <textarea name="contenu" cols="40" rows="20" wrap="soft" 
                                         placeholder="Article" required></textarea>

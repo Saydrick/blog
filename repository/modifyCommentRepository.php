@@ -5,6 +5,7 @@ namespace blog\repository;
 use blog\config\ConnectDb;
 use blog\enum\Is_checked;
 use Exception;
+use PDO;
 
 class modifyCommentRepository {
     public static function modifyComment($id_comment, $id_post, $comment) {
@@ -18,8 +19,8 @@ class modifyCommentRepository {
                                 WHERE ID_Commentaire = :id");
 
         // Binding values to parameter markers
-        $query->bindValue(':id', $id_comment);
-        $query->bindValue(':comment', $comment);
+        $query->bindValue(':id', $id_comment, PDO::PARAM_INT);
+        $query->bindValue(':comment', $comment, PDO::PARAM_STR);
         $query->bindValue(':modification_date', date('Y-m-d'));
         $query->bindValue(':is_checked', Is_checked::unverified->value);
 

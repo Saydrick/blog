@@ -6,6 +6,7 @@
 
                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                     <form action="/blog/public/delete-comment-confirm/{{ post.id }}-{{ comment.id_comment }}" method="post">
+                        <input type="hidden" name="token" value="{{session_token}}">
                         <div>Etes-vous sûr de vouloir supprimer votre commentaire ?</div>
                         <br>
                         <br>

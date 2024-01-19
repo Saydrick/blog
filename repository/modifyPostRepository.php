@@ -17,13 +17,11 @@ class modifyPostRepository {
                                 WHERE ID_post = :id");
 
         // Liez les valeurs aux marqueurs de paramètres
-        $query->bindValue(':id', $id);
-        $query->bindValue(':titre', $titre);
+        $query->bindValue(':id', $id, PDO::PARAM_INT);
+        $query->bindValue(':titre', $titre, PDO::PARAM_STR);
         $query->bindValue(':date_modification', date('Y-m-d'));
-        $query->bindValue(':chapo', $chapo);
-        $query->bindValue(':contenu', $contenu);
-
-        var_dump($query);
+        $query->bindValue(':chapo', $chapo, PDO::PARAM_STR);
+        $query->bindValue(':contenu', $contenu, PDO::PARAM_STR);
 
         if ($query->execute())
         {

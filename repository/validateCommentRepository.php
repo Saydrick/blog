@@ -18,7 +18,7 @@ class validateCommentRepository {
                                 WHERE ID_Commentaire = :id");
 
         // Liez les valeurs aux marqueurs de paramètres
-        $query->bindValue(':id', $id_comment);
+        $query->bindValue(':id', $id_comment, PDO::PARAM_INT);
         $query->bindValue(':is_checked', Is_checked::checked->value);
 
         // var_dump($query);

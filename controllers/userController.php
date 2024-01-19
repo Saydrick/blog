@@ -1,5 +1,7 @@
 <?php
 
+/* Not yet used */
+
 namespace blog\controller;
 
 use blog\repository\userRepository;
@@ -12,7 +14,7 @@ class userController {
         $this->_userRepository = $userRepository;
     }
 
-    function index() {
-        $this->_userRepository->getUser();
+    function index($id_user) {
+        $this->_userRepository->getUser($id_user);
     }
 }

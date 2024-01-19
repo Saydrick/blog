@@ -12,8 +12,12 @@ class registerRepository {
         $instance = ConnectDb::getInstance();
         $conn = $instance->getConnection();
 
-        $query = $conn->prepare("SELECT * FROM utilisateurs WHERE email = '$email'");
+        $query = $conn->prepare("SELECT * FROM utilisateurs WHERE email = :email");
+
+        $query->bindValue(':email', $email, PDO::PARAM_STR);
+
         $query->execute();
+        
         $res = $query->fetch(PDO::FETCH_ASSOC);
 
         if($res)
@@ -23,12 +27,20 @@ class registerRepository {
         else
         {
             $query2 = $conn->prepare("INSERT INTO utilisateurs (nom, prenom, email, password, is_admin)
-                                    VALUES ('".$nom."', '".$prenom."', '".$email."', '".$password."', ".Status::visiteur->value.")");
+                                    VALUES (:nom, :prenom, :email, :password, :statut)");
+
+            
+            $query->bindValue(':nom', $nom, PDO::PARAM_STR);
+            $query->bindValue(':prenom', $prenom, PDO::PARAM_STR);
+            $query->bindValue(':email', $email, PDO::PARAM_STR);
+            $query->bindValue(':password', $password, PDO::PARAM_STR);
+            $query->bindValue(':statut', Status::visiteur->value);
     
             if ($query2->execute())
             {
-                $result = "Bienvenu $prenom $nom !\n";
-                $result .= "Votre compte a bien été créé";
+                $id_user = $conn->lastInsertId();
+
+                return $id_user;
             }
             else
             {

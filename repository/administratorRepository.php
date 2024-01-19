@@ -19,7 +19,8 @@ class administratorRepository {
                                 JOIN commentaires ON (commentaires.ID_commentaire = posts_commentaires.ID_commentaire)
                                 JOIN utilisateurs ON (utilisateurs.ID_utilisateur = posts.ID_utilisateur)
                                 WHERE commentaires.is_checked = :is_checked
-                                GROUP BY posts.ID_post");
+                                GROUP BY posts.ID_post
+                                ORDER BY posts.date_modification DESC");
                                 
         $query->bindValue(':is_checked', Is_checked::unverified->value);
 
@@ -56,7 +57,8 @@ class administratorRepository {
                                 FROM commentaires
                                 JOIN posts_commentaires ON (posts_commentaires.ID_commentaire = commentaires.ID_commentaire)
                                 JOIN utilisateurs ON (utilisateurs.ID_utilisateur = commentaires.ID_utilisateur)
-                                WHERE commentaires.is_checked = :is_checked");
+                                WHERE commentaires.is_checked = :is_checked
+                                ORDER BY commentaires.date_modification DESC");
                                 
         $query->bindValue(':is_checked', Is_checked::unverified->value);
 

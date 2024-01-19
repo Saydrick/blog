@@ -1,9 +1,7 @@
 <?php
 
 /*
-- Traduction des champs dans les tables SQL ?
-- Traduction des champs dans le code ? ('date_modification' => 'modification_date')
-- Traduction des classes CSS ?
+-  TODO Traduction des classes CSS ?
 
 
 */
@@ -13,6 +11,10 @@ session_start();
 use PHPMailer\PHPMailer\PHPMailer;
 
 require_once('../config/requireLoader.php');
+
+if (!isset($_SESSION['TOKEN'])) {
+    $_SESSION['TOKEN'] = bin2hex(openssl_random_pseudo_bytes(6));
+ }
 
 $twigRenderer = new \blog\config\TwigRenderer(__DIR__.'/../views');
 
@@ -24,6 +26,7 @@ $router->setBasePath('/blog/public');
 $router->map('GET', '/', function() use ($twigRenderer) {
     require_once('../config/requireLoader.php');
 
+    $session_token = $_SESSION['TOKEN'];
     $session_id = !empty($_SESSION['USER_ID']) ? $_SESSION['USER_ID'] : NULL;
     $session_admin = !empty($_SESSION['USER_ADMIN']) ? $_SESSION['USER_ADMIN'] : NULL;
 
@@ -31,7 +34,7 @@ $router->map('GET', '/', function() use ($twigRenderer) {
 
     // Load page without controller settings
     $layout = 'layout.twig';
-    echo $twigRenderer->render($layout, ['page' => $page, 'session_id' => $session_id, 'session_admin' => $session_admin]);
+    echo $twigRenderer->render($layout, ['page' => $page, 'session_token' => $session_token, 'session_id' => $session_id, 'session_admin' => $session_admin]);
 },'homepage');
 
 
@@ -40,6 +43,7 @@ $router->map('GET', '/admin', function() use ($twigRenderer) {
     require_once('../config/requireLoader.php');
 
     // Retrieving the SESSION superglobal variable
+    $session_token = $_SESSION['TOKEN'];
     $session_id = !empty($_SESSION['USER_ID']) ? $_SESSION['USER_ID'] : NULL;
     $session_admin = !empty($_SESSION['USER_ADMIN']) ? $_SESSION['USER_ADMIN'] : NULL;
 
@@ -54,13 +58,14 @@ $router->map('GET', '/admin', function() use ($twigRenderer) {
 
     // Load page with controller settings
     $layout = 'layout.twig';
-    echo $twigRenderer->render($layout, ['page' => $page, 'posts' => $posts, 'comments' => $comments, 'session_id' => $session_id, 'session_admin' => $session_admin]);
+    echo $twigRenderer->render($layout, ['page' => $page, 'posts' => $posts, 'comments' => $comments, 'session_token' => $session_token, 'session_id' => $session_id, 'session_admin' => $session_admin]);
 }, 'administrator');
 
 $router->map('GET', '/admin/validateComment/[i:id]', function($id) use ($twigRenderer) {
     require_once('../config/requireLoader.php');
 
     // Retrieving the SESSION superglobal variable
+    $session_token = $_SESSION['TOKEN'];
     $session_id = !empty($_SESSION['USER_ID']) ? $_SESSION['USER_ID'] : NULL;
     $session_admin = !empty($_SESSION['USER_ADMIN']) ? $_SESSION['USER_ADMIN'] : NULL;
 
@@ -73,21 +78,22 @@ $router->map('GET', '/admin/validateComment/[i:id]', function($id) use ($twigRen
 
     // Load page with controller settings
     $layout = 'layout.twig';
-    echo $twigRenderer->render($layout, ['page' => $page, 'session_id' => $session_id, 'session_admin' => $session_admin]);
+    echo $twigRenderer->render($layout, ['page' => $page, 'session_token' => $session_token, 'session_id' => $session_id, 'session_admin' => $session_admin]);
 }, 'validerComment');
 
 $router->map('GET', '/admin/denyComment/[i:id_comment]', function($id_comment) use ($twigRenderer) {
     require_once('../config/requireLoader.php');
 
     // Retrieving the SESSION superglobal variable
+    $session_token = $_SESSION['TOKEN'];
     $session_id = !empty($_SESSION['USER_ID']) ? $_SESSION['USER_ID'] : NULL;
     $session_admin = !empty($_SESSION['USER_ADMIN']) ? $_SESSION['USER_ADMIN'] : NULL;
 
     // Class instantiation
-    $comment = new \blog\controllers\commentController(new \blog\repository\commentRepository); 
+    $controller = new \blog\controllers\commentController(new \blog\repository\commentRepository); 
 
     // Call a controller method
-    $comment = $comment->index($id_comment);
+    $comments = $controller->index($id_comment);
 
     // var_dump($comment);
 
@@ -95,26 +101,28 @@ $router->map('GET', '/admin/denyComment/[i:id_comment]', function($id_comment) u
 
     //Load page with controller settings
     $layout = 'layout.twig';
-    echo $twigRenderer->render($layout, ['page' => $page, 'comment' => $comment, 'session_id' => $session_id, 'session_admin' => $session_admin]);
+    echo $twigRenderer->render($layout, ['page' => $page, 'comments' => $comments, 'session_token' => $session_token, 'session_id' => $session_id, 'session_admin' => $session_admin]);
 }, 'denyComment');
 
-$router->map('GET', '/admin/denyComment-confirm/[i:id]', function($id) use ($twigRenderer) {
+
+$router->map('POST', '/admin/denyComment-confirm/[i:id_comment]-[i:id_user]', function($id_comment, $id_user) use ($twigRenderer) {
     require_once('../config/requireLoader.php');
 
     // Retrieving the SESSION superglobal variable
+    $session_token = $_SESSION['TOKEN'];
     $session_id = !empty($_SESSION['USER_ID']) ? $_SESSION['USER_ID'] : NULL;
     $session_admin = !empty($_SESSION['USER_ADMIN']) ? $_SESSION['USER_ADMIN'] : NULL;
 
     // Class instantiation
-    $controller = new \blog\controllers\denyCommentController(new \blog\repository\denyCommentRepository); 
+    $controller = new \blog\controllers\denyCommentController(new \blog\repository\denyCommentRepository, new \blog\repository\userRepository, new PHPMailer, new \blog\service\validateService); 
 
     // Call a controller method
-    $controller = $controller->delete($id);
+    $controller = $controller->delete($id_comment, $id_user);
     $page = 'denyComment.twig';
 
     //Load page without controller settings
     $layout = 'layout.twig';
-    echo $twigRenderer->render($layout, ['page' => $page, 'session_id' => $session_id, 'session_admin' => $session_admin]);
+    echo $twigRenderer->render($layout, ['page' => $page, 'session_token' => $session_token, 'session_id' => $session_id, 'session_admin' => $session_admin]);
 }, 'denyComment-confirm');
 
 
@@ -123,6 +131,7 @@ $router->map('GET', '/register', function() use ($twigRenderer) {
     require_once('../config/requireLoader.php');
 
     // Retrieving the SESSION superglobal variable
+    $session_token = $_SESSION['TOKEN'];
     $session_id = !empty($_SESSION['USER_ID']) ? $_SESSION['USER_ID'] : NULL;
     $session_admin = !empty($_SESSION['USER_ADMIN']) ? $_SESSION['USER_ADMIN'] : NULL;
 
@@ -131,7 +140,7 @@ $router->map('GET', '/register', function() use ($twigRenderer) {
 
     //Load page without controller settings
     $layout = 'layout.twig';
-    echo $twigRenderer->render($layout, ['page' => $page, 'session_id' => $session_id, 'session_admin' => $session_admin]);
+    echo $twigRenderer->render($layout, ['page' => $page, 'session_token' => $session_token, 'session_id' => $session_id, 'session_admin' => $session_admin]);
 }, 'register');
 
 
@@ -140,11 +149,12 @@ $router->map('POST', '/register-confirm', function() use ($twigRenderer) {
     require_once('../config/requireLoader.php');
 
     // Retrieving the SESSION superglobal variable
+    $session_token = $_SESSION['TOKEN'];
     $session_id = !empty($_SESSION['USER_ID']) ? $_SESSION['USER_ID'] : NULL;
     $session_admin = !empty($_SESSION['USER_ADMIN']) ? $_SESSION['USER_ADMIN'] : NULL;
     
     // Class instantiation
-    $controller = new \blog\controllers\registerController(new \blog\repository\registerRepository, new \blog\service\validateService);
+    $controller = new \blog\controllers\registerController(new \blog\repository\registerRepository, new \blog\repository\userRepository, new \blog\service\validateService);
 
     // Call a controller method
     $result = $controller->create();
@@ -152,7 +162,7 @@ $router->map('POST', '/register-confirm', function() use ($twigRenderer) {
 
     //Load page with controller settings
     $layout = 'layout.twig';
-    echo $twigRenderer->render($layout, ['page' => $page, 'result' => $result, 'session_id' => $session_id, 'session_admin' => $session_admin]);
+    echo $twigRenderer->render($layout, ['page' => $page, 'result' => $result, 'session_token' => $session_token, 'session_id' => $session_id, 'session_admin' => $session_admin]);
 }, 'register-confirm');
 
 
@@ -161,6 +171,7 @@ $router->map('GET', '/login', function() use ($twigRenderer) {
     require_once('../config/requireLoader.php');
     
     // Retrieving the SESSION superglobal variable
+    $session_token = $_SESSION['TOKEN'];
     $session_id = !empty($_SESSION['USER_ID']) ? $_SESSION['USER_ID'] : NULL;
     $session_admin = !empty($_SESSION['USER_ADMIN']) ? $_SESSION['USER_ADMIN'] : NULL;
     
@@ -168,7 +179,7 @@ $router->map('GET', '/login', function() use ($twigRenderer) {
 
     //Load page without controller settings
     $layout = 'layout.twig';
-    echo $twigRenderer->render($layout, ['page' => $page, 'session_id' => $session_id, 'session_admin' => $session_admin]);
+    echo $twigRenderer->render($layout, ['page' => $page, 'session_token' => $session_token, 'session_id' => $session_id, 'session_admin' => $session_admin]);
 }, 'login');
 
 
@@ -177,6 +188,7 @@ $router->map('POST', '/login-confirm', function() use ($twigRenderer) {
     require_once('../config/requireLoader.php');
     
     // Retrieving the SESSION superglobal variable
+    $session_token = $_SESSION['TOKEN'];
     $session_id = !empty($_SESSION['USER_ID']) ? $_SESSION['USER_ID'] : NULL;
     $session_admin = !empty($_SESSION['USER_ADMIN']) ? $_SESSION['USER_ADMIN'] : NULL;
     
@@ -189,7 +201,7 @@ $router->map('POST', '/login-confirm', function() use ($twigRenderer) {
 
     //Load page with controller settings
     $layout = 'layout.twig';
-    echo $twigRenderer->render($layout, ['page' => $page, 'result' => $result, 'session_id' => $session_id, 'session_admin' => $session_admin]);
+    echo $twigRenderer->render($layout, ['page' => $page, 'result' => $result, 'session_token' => $session_token, 'session_id' => $session_id, 'session_admin' => $session_admin]);
 }, 'login-confirm');
 
 
@@ -198,6 +210,7 @@ $router->map('GET', '/signOut', function() use ($twigRenderer) {
     require_once('../config/requireLoader.php');
     
     // Retrieving the SESSION superglobal variable
+    $session_token = $_SESSION['TOKEN'];
     $session_id = !empty($_SESSION['USER_ID']) ? $_SESSION['USER_ID'] : NULL;
     $session_admin = !empty($_SESSION['USER_ADMIN']) ? $_SESSION['USER_ADMIN'] : NULL;
     
@@ -205,7 +218,7 @@ $router->map('GET', '/signOut', function() use ($twigRenderer) {
 
     //Load page without controller settings
     $layout = 'layout.twig';
-    echo $twigRenderer->render($layout, ['page' => $page, 'session_id' => $session_id, 'session_admin' => $session_admin]);
+    echo $twigRenderer->render($layout, ['page' => $page, 'session_token' => $session_token, 'session_id' => $session_id, 'session_admin' => $session_admin]);
 }, 'signOut');
 
 
@@ -224,6 +237,7 @@ $router->map('POST', '/contact', function() use ($twigRenderer) {
     require_once('../config/requireLoader.php');
     
     // Retrieving the SESSION superglobal variable
+    $session_token = $_SESSION['TOKEN'];
     $session_id = !empty($_SESSION['USER_ID']) ? $_SESSION['USER_ID'] : NULL;
     $session_admin = !empty($_SESSION['USER_ADMIN']) ? $_SESSION['USER_ADMIN'] : NULL;
     
@@ -236,7 +250,7 @@ $router->map('POST', '/contact', function() use ($twigRenderer) {
 
     //Load page with controller settings
     $layout = 'layout.twig';
-    echo $twigRenderer->render($layout, ['page' => $page, 'result' => $result, 'session_id' => $session_id, 'session_admin' => $session_admin]);
+    echo $twigRenderer->render($layout, ['page' => $page, 'result' => $result, 'session_token' => $session_token, 'session_id' => $session_id, 'session_admin' => $session_admin]);
 }, 'contact');
 
 
@@ -245,6 +259,7 @@ $router->map('GET', '/all-posts', function() use ($twigRenderer) {
     require_once('../config/requireLoader.php');
     
     // Retrieving the SESSION superglobal variable
+    $session_token = $_SESSION['TOKEN'];
     $session_id = !empty($_SESSION['USER_ID']) ? $_SESSION['USER_ID'] : NULL;
     $session_admin = !empty($_SESSION['USER_ADMIN']) ? $_SESSION['USER_ADMIN'] : NULL;
 
@@ -257,7 +272,7 @@ $router->map('GET', '/all-posts', function() use ($twigRenderer) {
 
     //Load page with controller settings
     $layout = 'layout.twig';
-    echo $twigRenderer->render($layout, ['page' => $page, 'posts' => $posts, 'session_id' => $session_id, 'session_admin' => $session_admin]);
+    echo $twigRenderer->render($layout, ['page' => $page, 'posts' => $posts, 'session_token' => $session_token, 'session_id' => $session_id, 'session_admin' => $session_admin]);
 }, 'allPosts');
 
 
@@ -266,6 +281,7 @@ $router->map('GET', '/post/[i:id]', function($id) use ($twigRenderer) {
     require_once('../config/requireLoader.php');
     
     // Retrieving the SESSION superglobal variable
+    $session_token = $_SESSION['TOKEN'];
     $session_id = !empty($_SESSION['USER_ID']) ? $_SESSION['USER_ID'] : NULL;
     $session_admin = !empty($_SESSION['USER_ADMIN']) ? $_SESSION['USER_ADMIN'] : NULL;
 
@@ -281,7 +297,7 @@ $router->map('GET', '/post/[i:id]', function($id) use ($twigRenderer) {
 
     //Load page with controller settings
     $layout = 'layout.twig';
-    echo $twigRenderer->render($layout, ['page' => $page, 'posts' => $posts, 'comments' => $comments, 'session_id' => $session_id, 'session_admin' => $session_admin]);
+    echo $twigRenderer->render($layout, ['page' => $page, 'posts' => $posts, 'comments' => $comments, 'session_token' => $session_token, 'session_id' => $session_id, 'session_admin' => $session_admin]);
 }, 'post');
 
 
@@ -289,6 +305,7 @@ $router->map('GET', '/add-post', function() use ($twigRenderer) {
     require_once('../config/requireLoader.php');
     
     // Retrieving the SESSION superglobal variable
+    $session_token = $_SESSION['TOKEN'];
     $session_id = !empty($_SESSION['USER_ID']) ? $_SESSION['USER_ID'] : NULL;
     $session_admin = !empty($_SESSION['USER_ADMIN']) ? $_SESSION['USER_ADMIN'] : NULL;
 
@@ -296,7 +313,7 @@ $router->map('GET', '/add-post', function() use ($twigRenderer) {
 
     //Load page without controller settings
     $layout = 'layout.twig';
-    echo $twigRenderer->render($layout, ['page' => $page, 'session_id' => $session_id, 'session_admin' => $session_admin]);
+    echo $twigRenderer->render($layout, ['page' => $page, 'session_token' => $session_token, 'session_id' => $session_id, 'session_admin' => $session_admin]);
 }, 'addPost');
 
 
@@ -305,6 +322,7 @@ $router->map('POST', '/add-post-confirm', function() use ($twigRenderer) {
     require_once('../config/requireLoader.php');
     
     // Retrieving the SESSION superglobal variable
+    $session_token = $_SESSION['TOKEN'];
     $session_id = !empty($_SESSION['USER_ID']) ? $_SESSION['USER_ID'] : NULL;
     $session_admin = !empty($_SESSION['USER_ADMIN']) ? $_SESSION['USER_ADMIN'] : NULL;
     
@@ -317,7 +335,7 @@ $router->map('POST', '/add-post-confirm', function() use ($twigRenderer) {
 
     //Load page with controller settings
     $layout = 'layout.twig';
-    echo $twigRenderer->render($layout, ['page' => $page, 'result' => $result, 'session_id' => $session_id, 'session_admin' => $session_admin]);
+    echo $twigRenderer->render($layout, ['page' => $page, 'result' => $result, 'session_token' => $session_token, 'session_id' => $session_id, 'session_admin' => $session_admin]);
 }, 'addPost-confirm');
 
 
@@ -326,6 +344,7 @@ $router->map('GET', '/modify-post/[i:id]', function($id) use ($twigRenderer) {
     require_once('../config/requireLoader.php');
     
     // Retrieving the SESSION superglobal variable
+    $session_token = $_SESSION['TOKEN'];
     $session_id = !empty($_SESSION['USER_ID']) ? $_SESSION['USER_ID'] : NULL;
     $session_admin = !empty($_SESSION['USER_ADMIN']) ? $_SESSION['USER_ADMIN'] : NULL;
 
@@ -338,7 +357,7 @@ $router->map('GET', '/modify-post/[i:id]', function($id) use ($twigRenderer) {
 
     //Load page with controller settings
     $layout = 'layout.twig';
-    echo $twigRenderer->render($layout, ['page' => $page, 'posts' => $posts, 'session_id' => $session_id, 'session_admin' => $session_admin]);
+    echo $twigRenderer->render($layout, ['page' => $page, 'posts' => $posts, 'session_token' => $session_token, 'session_id' => $session_id, 'session_admin' => $session_admin]);
 }, 'modifyPost');
 
 
@@ -347,6 +366,7 @@ $router->map('POST', '/modify-post-confirm/[i:id]', function($id) use ($twigRend
     require_once('../config/requireLoader.php');
     
     // Retrieving the SESSION superglobal variable
+    $session_token = $_SESSION['TOKEN'];
     $session_id = !empty($_SESSION['USER_ID']) ? $_SESSION['USER_ID'] : NULL;
     $session_admin = !empty($_SESSION['USER_ADMIN']) ? $_SESSION['USER_ADMIN'] : NULL;
     
@@ -359,7 +379,7 @@ $router->map('POST', '/modify-post-confirm/[i:id]', function($id) use ($twigRend
 
     //Load page with controller settings
     $layout = 'layout.twig';
-    echo $twigRenderer->render($layout, ['page' => $page, 'result' => $result, 'session_id' => $session_id, 'session_admin' => $session_admin]);
+    echo $twigRenderer->render($layout, ['page' => $page, 'result' => $result, 'session_token' => $session_token, 'session_id' => $session_id, 'session_admin' => $session_admin]);
 }, 'modifyPost-confirm');
 
 
@@ -368,6 +388,7 @@ $router->map('GET', '/delete-post/[i:id]', function($id) use ($twigRenderer) {
     require_once('../config/requireLoader.php');
     
     // Retrieving the SESSION superglobal variable
+    $session_token = $_SESSION['TOKEN'];
     $session_id = !empty($_SESSION['USER_ID']) ? $_SESSION['USER_ID'] : NULL;
     $session_admin = !empty($_SESSION['USER_ADMIN']) ? $_SESSION['USER_ADMIN'] : NULL;
 
@@ -380,7 +401,7 @@ $router->map('GET', '/delete-post/[i:id]', function($id) use ($twigRenderer) {
 
     //Load page with controller settings
     $layout = 'layout.twig';
-    echo $twigRenderer->render($layout, ['page' => $page, 'posts' => $posts, 'session_id' => $session_id, 'session_admin' => $session_admin]);
+    echo $twigRenderer->render($layout, ['page' => $page, 'posts' => $posts, 'session_token' => $session_token, 'session_id' => $session_id, 'session_admin' => $session_admin]);
 }, 'deletePost');
 
 
@@ -389,6 +410,7 @@ $router->map('POST', '/delete-post-confirm/[i:id]', function($id) use ($twigRend
     require_once('../config/requireLoader.php');
     
     // Retrieving the SESSION superglobal variable
+    $session_token = $_SESSION['TOKEN'];
     $session_id = !empty($_SESSION['USER_ID']) ? $_SESSION['USER_ID'] : NULL;
     $session_admin = !empty($_SESSION['USER_ADMIN']) ? $_SESSION['USER_ADMIN'] : NULL;
     
@@ -401,7 +423,7 @@ $router->map('POST', '/delete-post-confirm/[i:id]', function($id) use ($twigRend
 
     //Load page with controller settings
     $layout = 'layout.twig';
-    echo $twigRenderer->render($layout, ['page' => $page, 'result' => $result, 'session_id' => $session_id, 'session_admin' => $session_admin]);
+    echo $twigRenderer->render($layout, ['page' => $page, 'result' => $result, 'session_token' => $session_token, 'session_id' => $session_id, 'session_admin' => $session_admin]);
 }, 'deletePost-confirm');
 
 
@@ -410,6 +432,7 @@ $router->map('POST', '/add-comment/[i:id]', function($id) use ($twigRenderer) {
     require_once('../config/requireLoader.php');
     
     // Retrieving the SESSION superglobal variable
+    $session_token = $_SESSION['TOKEN'];
     $session_id = !empty($_SESSION['USER_ID']) ? $_SESSION['USER_ID'] : NULL;
     $session_admin = !empty($_SESSION['USER_ADMIN']) ? $_SESSION['USER_ADMIN'] : NULL;
     
@@ -422,7 +445,7 @@ $router->map('POST', '/add-comment/[i:id]', function($id) use ($twigRenderer) {
 
     //Load page with controller settings
     $layout = 'layout.twig';
-    echo $twigRenderer->render($layout, ['page' => $page, 'result' => $result, 'session_id' => $session_id, 'session_admin' => $session_admin]);
+    echo $twigRenderer->render($layout, ['page' => $page, 'result' => $result, 'session_token' => $session_token, 'session_id' => $session_id, 'session_admin' => $session_admin]);
 }, 'addComment');
 
 
@@ -431,6 +454,7 @@ $router->map('GET', '/modify-comment/[i:id_post]-[i:id_comment]', function($id_p
     require_once('../config/requireLoader.php');
     
     // Retrieving the SESSION superglobal variable
+    $session_token = $_SESSION['TOKEN'];
     $session_id = !empty($_SESSION['USER_ID']) ? $_SESSION['USER_ID'] : NULL;
     $session_admin = !empty($_SESSION['USER_ADMIN']) ? $_SESSION['USER_ADMIN'] : NULL;
 
@@ -448,7 +472,7 @@ $router->map('GET', '/modify-comment/[i:id_post]-[i:id_comment]', function($id_p
 
     //Load page with controller settings
     $layout = 'layout.twig';
-    echo $twigRenderer->render($layout, ['page' => $page, 'post' => $post, 'comments' => $comments, 'modify_comment' => $modify_comment, 'session_id' => $session_id, 'session_admin' => $session_admin]);
+    echo $twigRenderer->render($layout, ['page' => $page, 'post' => $post, 'comments' => $comments, 'modify_comment' => $modify_comment, 'session_token' => $session_token, 'session_id' => $session_id, 'session_admin' => $session_admin]);
 }, 'modifyComment');
 
 
@@ -457,6 +481,7 @@ $router->map('POST', '/modify-comment-confirm/[i:id_post]-[i:id_comment]', funct
     require_once('../config/requireLoader.php');
     
     // Retrieving the SESSION superglobal variable
+    $session_token = $_SESSION['TOKEN'];
     $session_id = !empty($_SESSION['USER_ID']) ? $_SESSION['USER_ID'] : NULL;
     $session_admin = !empty($_SESSION['USER_ADMIN']) ? $_SESSION['USER_ADMIN'] : NULL;
     
@@ -469,7 +494,7 @@ $router->map('POST', '/modify-comment-confirm/[i:id_post]-[i:id_comment]', funct
 
     //Load page with controller settings
     $layout = 'layout.twig';
-    echo $twigRenderer->render($layout, ['page' => $page, 'result' => $result, 'session_id' => $session_id, 'session_admin' => $session_admin]);
+    echo $twigRenderer->render($layout, ['page' => $page, 'result' => $result, 'session_token' => $session_token, 'session_id' => $session_id, 'session_admin' => $session_admin]);
 }, 'modifyComment-confirm');
 
 
@@ -478,6 +503,7 @@ $router->map('GET', '/delete-comment/[i:id_post]-[i:id_comment]', function($id_p
     require_once('../config/requireLoader.php');
     
     // Retrieving the SESSION superglobal variable
+    $session_token = $_SESSION['TOKEN'];
     $session_id = !empty($_SESSION['USER_ID']) ? $_SESSION['USER_ID'] : NULL;
     $session_admin = !empty($_SESSION['USER_ADMIN']) ? $_SESSION['USER_ADMIN'] : NULL;
 
@@ -492,7 +518,7 @@ $router->map('GET', '/delete-comment/[i:id_post]-[i:id_comment]', function($id_p
 
     //Load page with controller settings
     $layout = 'layout.twig';
-    echo $twigRenderer->render($layout, ['page' => $page, 'post' => $post, 'comment' => $comment, 'session_id' => $session_id, 'session_admin' => $session_admin]);
+    echo $twigRenderer->render($layout, ['page' => $page, 'post' => $post, 'comment' => $comment, 'session_token' => $session_token, 'session_id' => $session_id, 'session_admin' => $session_admin]);
 }, 'deleteComment');
 
 
@@ -501,6 +527,7 @@ $router->map('POST', '/delete-comment-confirm/[i:id_post]-[i:id_comment]', funct
     require_once('../config/requireLoader.php');
     
     // Retrieving the SESSION superglobal variable
+    $session_token = $_SESSION['TOKEN'];
     $session_id = !empty($_SESSION['USER_ID']) ? $_SESSION['USER_ID'] : NULL;
     $session_admin = !empty($_SESSION['USER_ADMIN']) ? $_SESSION['USER_ADMIN'] : NULL;
     
@@ -513,7 +540,7 @@ $router->map('POST', '/delete-comment-confirm/[i:id_post]-[i:id_comment]', funct
 
     //Load page with controller settings
     $layout = 'layout.twig';
-    echo $twigRenderer->render($layout, ['page' => $page, 'result' => $result, 'session_id' => $session_id, 'session_admin' => $session_admin]);
+    echo $twigRenderer->render($layout, ['page' => $page, 'result' => $result, 'session_token' => $session_token, 'session_id' => $session_id, 'session_admin' => $session_admin]);
 }, 'deleteComment-confirm');
 
 

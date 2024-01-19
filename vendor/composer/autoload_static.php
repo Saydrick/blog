@@ -18,6 +18,7 @@ class ComposerStaticInitfddbc3e909eca1e357418568a5943168
         ),
         'T' => 
         array (
+            'Twig\\Extra\\Markdown\\' => 20,
             'Twig\\' => 5,
         ),
         'S' => 
@@ -30,12 +31,20 @@ class ComposerStaticInitfddbc3e909eca1e357418568a5943168
             'PHPMailer\\PHPMailer\\' => 20,
             'PHPMailer\\' => 10,
         ),
+        'M' => 
+        array (
+            'Michelf\\' => 8,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
         'blog\\' => 
         array (
             0 => __DIR__ . '/../..' . '/',
+        ),
+        'Twig\\Extra\\Markdown\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/twig/markdown-extra',
         ),
         'Twig\\' => 
         array (
@@ -56,6 +65,10 @@ class ComposerStaticInitfddbc3e909eca1e357418568a5943168
         'PHPMailer\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
+        ),
+        'Michelf\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/michelf/php-markdown/Michelf',
         ),
     );
 

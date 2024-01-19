@@ -1,2 +1,59 @@
-<hr>
-<h2>Footer</h2>
+<footer>
+    <div class="container-fluide footer_container"> {# CSS #}
+        <div class="row footer_row"> {# CSS #}
+
+            <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1"></div>
+
+            <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 logo_footer center">
+                <img src="/blog/views/Component/img/logo_cb.png" alt="Logo" id="logo_footer">
+            </div>
+
+
+            <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5 center borderLR">
+                <nav class="menu_footer">
+                    <ul class="footer_ul">
+                        <li class="footer_li"><a href="/blog/public/">Accueil</a></li>
+                        <li class="footer_li"><a href="/blog/public/all-posts">Posts</a></li>
+                        {% if session_id != NULL %}
+                            <li class="footer_li"><a href="/blog/public/add-post">Ajouter un post</a></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+
+
+            <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 center">
+                <p id="socialNetwork">Retrouvez-nous sur les réseaux</p>
+                <ul class="footer_ul">
+                    <li class="li_logo">
+                        <a href="https://www.facebook.com/">
+                            <img src="/blog/views/Component/img/facebook.png" alt="Facebook" id="logo_footer">
+                            <h5>Facebook</h5>
+                        </a>
+                    </li> 
+                    <li class="li_logo">
+                        <a href="https://twitter.com/">
+                            <img src="/blog/views/Component/img/twitter.png" alt="Twitter" id="logo_footer">
+                            <h5>Twitter</h5>
+                        </a>
+                    </li> 
+                    <li class="li_logo">
+                        <a href="https://www.instagram.com/">
+                            <img src="/blog/views/Component/img/insta.png" alt="Insta" id="logo_footer">
+                            <h5>Instagram</h5>
+                        </a>
+                    </li> 
+                    <li class="li_logo">
+                        <a href="https://www.linkedin.com/">
+                            <img src="/blog/views/Component/img/linkedin.png" alt="Linkedin" id="logo_footer">
+                            <h5>Linkedin</h5>
+                        </a>
+                    </li> 
+                </ul>
+            </div>  
+
+            <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1"></div>
+
+        </div>
+    </div>
+</footer>

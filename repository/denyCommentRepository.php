@@ -1,26 +1,22 @@
 <?php
 
-/* TODO */
 namespace blog\repository;
 
 use blog\config\ConnectDb;
-use blog\enum\Is_checked;
 use Exception;
 use PDO;
 
-class validerCommentaireRepository {
-    public static function validerCommentaire($id_commentaire) {
+class denyCommentRepository {
+    public static function denyComment($id_comment) {
 
         $instance = ConnectDb::getInstance();
         $conn = $instance->getConnection();
 
-        $query = $conn->prepare("UPDATE Commentaires 
-                                SET is_checked = :is_checked
+        $query = $conn->prepare("DELETE FROM Commentaires 
                                 WHERE ID_Commentaire = :id");
 
         // Liez les valeurs aux marqueurs de paramètres
-        $query->bindValue(':id', $id_commentaire);
-        $query->bindValue(':is_checked', Is_checked::checked->value);
+        $query->bindValue(':id', $id_comment, PDO::PARAM_INT);
 
         // var_dump($query);
 

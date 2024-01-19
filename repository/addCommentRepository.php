@@ -21,9 +21,9 @@ class addCommentRepository {
         // Binding values to parameter markers
         $query->bindValue(':date_creation', date('Y-m-d'));
         $query->bindValue(':date_modification', date('Y-m-d'));
-        $query->bindValue(':message', $comment);
+        $query->bindValue(':message', $comment, PDO::PARAM_STR);
         $query->bindValue(':is_checked', Is_checked::unverified->value);
-        $query->bindValue(':user_id', $_SESSION['USER_ID']);
+        $query->bindValue(':user_id', $_SESSION['USER_ID'], PDO::PARAM_INT);
 
         if ($query->execute())
         {
@@ -34,8 +34,8 @@ class addCommentRepository {
                                     VALUES (:id_post, :id_comment)");
 
             // Binding values to parameter markers
-            $query2->bindValue(':id_post', $id_post);
-            $query2->bindValue(':id_comment', $id_comment);
+            $query2->bindValue(':id_post', $id_post, PDO::PARAM_INT);
+            $query2->bindValue(':id_comment', $id_comment, PDO::PARAM_INT);
 
             if ($query2->execute())
             {

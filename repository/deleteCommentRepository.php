@@ -4,6 +4,7 @@ namespace blog\repository;
 
 use blog\config\ConnectDb;
 use Exception;
+use PDO;
 
 class deleteCommentRepository {
     public static function deleteComment($id_post, $id_comment) {
@@ -15,7 +16,7 @@ class deleteCommentRepository {
                                 WHERE ID_commentaire = :id");
 
         // Liez les valeurs aux marqueurs de paramètres
-        $query->bindValue(':id', $id_comment);
+        $query->bindValue(':id', $id_comment, PDO::PARAM_INT);
 
         var_dump($query);
 

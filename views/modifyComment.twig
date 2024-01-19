@@ -4,7 +4,7 @@
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <h2>Voici l'article n°{{ post.id }}</h2>
                 <br>
-                {% if post.id_auteur == session %}
+                {% if post.id_auteur == session_id %}
                     <a href="/blog/public/modify-post/{{ post.id }}">
                         <button>Modifier cet article</button>
                     </a><br><br>
@@ -43,6 +43,7 @@
 
                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                     <form action="/blog/public/modify-comment-confirm/{{ post.id }}-{{ modify_comment.id_commentaire }}" method="post">
+                        <input type="hidden" name="token" value="{{session_token}}">
                         <textarea name="commentaire" cols="100" rows="3" wrap="soft" required>{{ modify_comment.message }}</textarea>
                         <br />
                         <input type="submit" name="envoyer" value="Modifier" />

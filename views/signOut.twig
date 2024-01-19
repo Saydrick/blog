@@ -4,10 +4,11 @@
         
         <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
             <form action="/blog/public/signOut-confirm" method="post">
+                <input type="hidden" name="token" value="{{session_token}}">
                 <h4>Voulez-vous vous déconnecter ?</h4>
                 <br />
-                <input type="submit" name="deconnexion" value="Se deconnecter"/>
-                <input type="button" name="retour" value="Annuler" onclick="history.back()"/>
+                <button type="submit" name="envoyer">SE DECONNECTER</button>
+                <button type="button" name="retour" onclick="history.back()">ANNULER</button>
             </form>
         </div>
         

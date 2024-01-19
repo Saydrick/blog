@@ -24,10 +24,6 @@ class userRepository {
                         'is_admin' => $row['is_admin']
                         ];  
 
-
-
-
-
                 $users[] = $user;
         } 
             return $users;
@@ -41,7 +37,10 @@ class userRepository {
 
         $query = $conn->prepare("SELECT ID_utilisateur, nom, prenom, is_admin 
                                 FROM utilisateurs 
-                                WHERE email = '$user_mail'");
+                                WHERE email = :user_mail");
+
+        $query->bindValue(':user_mail', $user_mail, PDO::PARAM_STR);
+
         $query->execute();
 
         $row = $query->fetch(PDO::FETCH_ASSOC);
@@ -64,18 +63,22 @@ class userRepository {
 
         $query = $conn->prepare("SELECT ID_utilisateur, nom, prenom, email, is_admin 
                                 FROM utilisateurs 
-                                WHERE ID_utilisateur = '$user_id'");
+                                WHERE ID_utilisateur = :user_id");
+
+        $query->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+
         $query->execute();
 
         $row = $query->fetch(PDO::FETCH_ASSOC);
         
         $user = [
                 'id' => $row['ID_utilisateur'],
+                'email' => $row['email'],
                 'nom' => $row['nom'],
                 'prenom' => $row['prenom'],
                 'is_admin' => $row['is_admin']
                 ];  
 
-            return $user;
+        return $user;
     }
 }

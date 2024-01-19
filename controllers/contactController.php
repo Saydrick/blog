@@ -4,13 +4,13 @@ namespace blog\controllers;
 
 use PHPMailer\PHPMailer\PHPMailer;
 use blog\service\validateService;
-use PHPMailer\PHPMailer\Exception;
+use blog\Exceptions\Exception;
 
 require_once('../config/requireLoader.php');
 
 class contactController {
 
-    protected $PHPMailer;
+    protected PHPMailer $PHPMailer;
     protected validateService $_validateService;
 
     function __construct(PHPMailer $PHPMailer, validateService $validateService) {
@@ -35,6 +35,16 @@ class contactController {
 
 
             if(isset($_POST['envoyer'])) {
+
+                // If token is not difined OR if post token is different from the session token
+                if (!$_POST['token'] || $_POST['token'] !== $_SESSION['TOKEN']) {
+                    // show an error message
+                    echo '<p class="error">Error: invalid form submission</p>';
+                    // return 405 http status code
+                    header($_SERVER['SERVER_PROTOCOL'] . ' 405 Method Not Allowed');
+                    exit;
+                }
+                
                 $formRules = [
                     'nom' => ['type' => 'required', 'message' => 'Veuillez renseigner votre nom'],
                     'prenom' => ['type' => 'required', 'message' => 'Veuillez renseigner votre prénom'],
@@ -45,11 +55,11 @@ class contactController {
             
                 $this->_validateService->formValidate($_POST, $formRules);
 
-                $nom = $_POST['nom'];
-                $prenom = $_POST['prenom'];
-                $mail = $_POST['mail'];
-                $sujet = $_POST['sujet'];
-                $message = $_POST['message'];
+                $nom = strip_tags($_POST['nom']);
+                $prenom = strip_tags($_POST['prenom']);
+                $mail = strip_tags($_POST['mail']);
+                $sujet = strip_tags($_POST['sujet']);
+                $message = strip_tags($_POST['message']);
 
                 //Recipients
                 $phpmailer->setFrom($mail, $nom . $prenom);
