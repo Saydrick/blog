@@ -50,7 +50,5 @@ class ModifyPostController
         } catch (Exception $e) {
             $result = 'Erreur : ' . $e->errorMessage();
         }
-
-        // return $result;
     }
 }

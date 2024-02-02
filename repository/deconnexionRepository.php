@@ -42,7 +42,6 @@ class ConnexionRepository
                 }
             }
         } catch (Exception $e) {
-            // throw new Exception($e->getMessage());
             $result = 'Erreur : ' . $e->getMessage();
             return $result;
         }

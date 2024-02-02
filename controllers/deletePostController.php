@@ -31,7 +31,5 @@ class DeletePostController
         } catch (Exception $e) {
             $result = 'Erreur : ' . $e->errorMessage();
         }
-
-        // return $result;
     }
 }

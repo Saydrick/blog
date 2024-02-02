@@ -41,7 +41,5 @@ class ModifyCommentController
         } catch (Exception $e) {
             $result = 'Erreur : ' . $e->errorMessage();
         }
-
-        // return $result;
     }
 }

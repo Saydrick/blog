@@ -1,6 +1,6 @@
 <?php
 
-namespace blog\enum;
+namespace blog\Enum;
 
 enum IsChecked: int
 {

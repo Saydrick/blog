@@ -3,7 +3,7 @@
 namespace blog\repository;
 
 use blog\config\ConnectDb;
-use blog\enum\Status;
+use blog\Enum\Status;
 use PDO;
 
 class RegisterRepository

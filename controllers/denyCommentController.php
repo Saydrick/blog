@@ -35,7 +35,6 @@ class DenyCommentController
 
             try {
                 //Server settings
-                // $phpmailer->SMTPDebug = SMTP::DEBUG_SERVER;
                 $phpmailer->isSMTP();
                 $phpmailer->Host = 'sandbox.smtp.mailtrap.io';
                 $phpmailer->SMTPAuth = true;

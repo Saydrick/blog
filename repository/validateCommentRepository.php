@@ -3,7 +3,7 @@
 namespace blog\repository;
 
 use blog\config\ConnectDb;
-use blog\enum\IsChecked;
+use blog\Enum\IsChecked;
 use Exception;
 use PDO;
 
@@ -22,8 +22,6 @@ class ValidateCommentRepository
         // Liez les valeurs aux marqueurs de paramètres
         $query->bindValue(':id', $id_comment, PDO::PARAM_INT);
         $query->bindValue(':IsChecked', IsChecked::checked->value);
-
-        // var_dump($query);
 
         if ($query->execute()) {
             return;

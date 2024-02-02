@@ -25,7 +25,6 @@ class ContactController
 
         try {
             //Server settings
-            // $phpmailer->SMTPDebug = SMTP::DEBUG_SERVER;
             $phpmailer->isSMTP();
             $phpmailer->Host = 'sandbox.smtp.mailtrap.io';
             $phpmailer->SMTPAuth = true;
@@ -59,15 +58,11 @@ class ContactController
                 //Recipients
                 $phpmailer->setFrom($mail, $nom . $prenom);
                 $phpmailer->addAddress('cedric.bouzanquet@gmail.com', 'BOUZANQUET Cédric');     //Add a recipient
-                // $phpmailer->addReplyTo('info@example.com', 'Information');
-                // $phpmailer->addCC('cc@example.com');
-                // $phpmailer->addBCC('bcc@example.com');
 
                 //Content
                 $phpmailer->isHTML(true);                                  //Set email format to HTML
                 $phpmailer->Subject = $sujet;
                 $phpmailer->Body    = $message;
-                // $phpmailer->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
                 $phpmailer->send();
 

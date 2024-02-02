@@ -4,7 +4,7 @@ namespace blog\repository;
 
 use blog\config\ConnectDb;
 use blog\Helper\Helper;
-use blog\enum\IsChecked;
+use blog\Enum\IsChecked;
 use PDO;
 
 class CommentRepository
@@ -99,7 +99,6 @@ class CommentRepository
             $comments[] = $comment;
         }
 
-        // var_dump($comments);
         return $comments;
     }
 }

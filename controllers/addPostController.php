@@ -50,7 +50,5 @@ class AddPostController
         } catch (Exception $e) {
             $result = 'Erreur : ' . $e->errorMessage();
         }
-
-        // return $result;
     }
 }
