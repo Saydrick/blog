@@ -38,7 +38,7 @@ class ComposerStaticInitfddbc3e909eca1e357418568a5943168
     public static $prefixDirsPsr4 = array (
         'blog\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/',
+            0 => '/blog',
         ),
         'Twig\\Extra\\Markdown\\' => 
         array (
