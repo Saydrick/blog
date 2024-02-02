@@ -35,8 +35,6 @@ class AddPostRepository
         $query->bindValue(':contenu', $contenu, PDO::PARAM_STR);
         $query->bindValue(':user_id', $_SESSION['USER_ID'], PDO::PARAM_INT);
 
-        var_dump($query);
-
         if ($query->execute()) {
             $id_post = $conn->lastInsertId();
 

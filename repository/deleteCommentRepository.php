@@ -20,8 +20,6 @@ class DeleteCommentRepository
         // Liez les valeurs aux marqueurs de paramètres
         $query->bindValue(':id', $id_comment, PDO::PARAM_INT);
 
-        var_dump($query);
-
         if ($query->execute()) {
             return $id_post;
         } else {

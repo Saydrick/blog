@@ -20,7 +20,6 @@ class ValidateCommentController
             $result = $this->ValidateCommentRepository->validateComment($id_comment);
 
             header("Location: /blog/public/admin");
-            exit;
         } catch (Exception $e) {
             $result = 'Erreur : ' . $e->errorMessage();
         }

@@ -4,7 +4,6 @@ namespace blog\repository;
 
 use blog\config\ConnectDb;
 use blog\Helper\Helper;
-use Michelf\Markdown;
 use PDO;
 
 class PostRepository
@@ -30,15 +29,13 @@ class PostRepository
         $date_creation = Helper::dateFormat($row['date_creation']);
         $date_modification = Helper::dateFormat($row['date_modification']);
 
-        $contenu = Markdown::defaultTransform($row['contenu']);
-
         $post = [
                 'id' => $row['ID_post'],
                 'titre' => $row['titre'],
                 'date_creation' => $date_creation,
                 'date_modification' => $date_modification,
                 'chapo' => $row['chapo'],
-                'contenu' => $contenu,
+                'contenu' => $row['contenu'],
                 'auteur' => $row['nom'] . " " . $row['prenom'],
                 'id_auteur' => $row['ID_utilisateur'],
                 'utilisateur' => !empty($_SESSION['USER_ID']) ? $_SESSION['USER_ID'] : null
