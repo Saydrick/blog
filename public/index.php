@@ -2,7 +2,6 @@
 
 session_start();
 
-use AltoRouter;
 use PHPMailer\PHPMailer\PHPMailer;
 use blog\controllers\AdministratorController;
 
