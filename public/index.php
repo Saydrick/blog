@@ -6,7 +6,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use blog\controllers\AdministratorController;
 
 require_once('../config/RequireLoader.php');
-require_once('/blog/repository/AdministratorRepository.php');
+require_once('../repository/AdministratorRepository.php');
 
 if (!isset($_SESSION['TOKEN'])) {
     $_SESSION['TOKEN'] = bin2hex(openssl_random_pseudo_bytes(6));
@@ -44,7 +44,7 @@ $router->map('GET', '/', function () use ($twigRenderer) {
                                 /* ADMINISTRATOR */
 $router->map('GET', '/admin', function () use ($twigRenderer) {
     require_once('../config/RequireLoader.php');
-    require_once('/blog/repository/AdministratorRepository.php');
+    require_once('../repository/AdministratorRepository.php');
 
     // Retrieving the SESSION superglobal variable
     $session_token = $_SESSION['TOKEN'];
