@@ -2,7 +2,9 @@
 
 session_start();
 
+use AltoRouter;
 use PHPMailer\PHPMailer\PHPMailer;
+use blog\controllers\AdministratorController;
 
 require_once('../config/RequireLoader.php');
 
@@ -49,7 +51,7 @@ $router->map('GET', '/admin', function () use ($twigRenderer) {
     $session_admin = !empty($_SESSION['USER_ADMIN']) ? $_SESSION['USER_ADMIN'] : null;
 
     // Class instantiation
-    $posts = new \blog\controllers\AdministratorController(new \blog\repository\AdministratorRepository());
+    $posts = new AdministratorController(new \blog\repository\AdministratorRepository());
     $comments = new \blog\controllers\AdministratorController(new \blog\repository\AdministratorRepository());
 
     // Call a controller method
