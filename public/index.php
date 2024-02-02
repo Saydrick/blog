@@ -6,6 +6,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use blog\controllers\AdministratorController;
 
 require_once('../config/RequireLoader.php');
+require_once('/blog/repository/AdministratorRepository.php');
 
 if (!isset($_SESSION['TOKEN'])) {
     $_SESSION['TOKEN'] = bin2hex(openssl_random_pseudo_bytes(6));
