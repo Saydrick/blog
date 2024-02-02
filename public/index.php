@@ -715,6 +715,7 @@ $router->map('GET', '/delete-comment/[i:id_post]-[i:id_comment]', function ($id_
     // Call a controller method
     $post = $post->index($id_post);
     $comment = $comment->index($id_comment);
+
     $page = 'deleteComment.twig';
 
     //Load page with controller settings

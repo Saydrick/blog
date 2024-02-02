@@ -17,7 +17,7 @@ class ModifyCommentRepository
 
         // Modify comment in database
         $query = $conn->prepare("UPDATE Commentaires 
-                                SET message = :comment, date_modification = :modification_date, IsChecked = :IsChecked
+                                SET message = :comment, date_modification = :modification_date, is_checked = :IsChecked
                                 WHERE ID_Commentaire = :id");
 
         // Binding values to parameter markers

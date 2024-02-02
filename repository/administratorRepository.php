@@ -25,7 +25,7 @@ class AdministratorRepository
                                 JOIN posts_commentaires ON (posts_commentaires.ID_post = posts.ID_post)
                                 JOIN commentaires ON (commentaires.ID_commentaire = posts_commentaires.ID_commentaire)
                                 JOIN utilisateurs ON (utilisateurs.ID_utilisateur = posts.ID_utilisateur)
-                                WHERE commentaires.IsChecked = :IsChecked
+                                WHERE commentaires.is_checked = :IsChecked
                                 GROUP BY posts.ID_post
                                 ORDER BY posts.date_modification DESC");
 
@@ -68,7 +68,7 @@ class AdministratorRepository
                             FROM commentaires
                             JOIN posts_commentaires ON (posts_commentaires.ID_commentaire = commentaires.ID_commentaire)
                             JOIN utilisateurs ON (utilisateurs.ID_utilisateur = commentaires.ID_utilisateur)
-                            WHERE commentaires.IsChecked = :IsChecked
+                            WHERE commentaires.is_checked = :IsChecked
                             ORDER BY commentaires.date_modification DESC");
 
         $query->bindValue(':IsChecked', IsChecked::unverified->value);

@@ -26,7 +26,7 @@ class CommentRepository
                     INNER JOIN posts_commentaires ON (posts_commentaires.ID_commentaire = commentaires.ID_commentaire)
                     INNER JOIN utilisateurs ON (utilisateurs.ID_utilisateur = commentaires.ID_utilisateur)
                     WHERE posts_commentaires.ID_post = :id_post
-                    AND commentaires.IsChecked = :IsChecked
+                    AND commentaires.is_checked = :IsChecked
                     ORDER BY commentaires.date_modification DESC");
 
 

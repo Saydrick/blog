@@ -16,7 +16,7 @@ class ValidateCommentRepository
         $conn = $instance->getConnection();
 
         $query = $conn->prepare("UPDATE Commentaires 
-                                SET IsChecked = :IsChecked
+                                SET is_checked = :IsChecked
                                 WHERE ID_Commentaire = :id");
 
         // Liez les valeurs aux marqueurs de paramètres
