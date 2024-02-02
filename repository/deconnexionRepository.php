@@ -6,8 +6,10 @@ use blog\config\ConnectDb;
 use Exception;
 use PDO;
 
-class connexionRepository {
-    public function checkUser($email, $password) {
+class ConnexionRepository
+{
+    public function checkUser($email, $password)
+    {
 
         try {
             $instance = ConnectDb::getInstance();
@@ -23,11 +25,9 @@ class connexionRepository {
 
             $res = $query->fetch(PDO::FETCH_ASSOC);
 
-            if ($res)
-            {
+            if ($res) {
                 $passwordHash = $res['password'];
-                if (password_verify($password, $passwordHash))
-                {            
+                if (password_verify($password, $passwordHash)) {
                     $user = [
                         'user_ID' => $res['ID_utilisateur'],
                         'email' => $email,
@@ -35,17 +35,13 @@ class connexionRepository {
                         'prenom' => $res['prenom'],
                         'is_admin' => $res['is_admin']
                         ];
-                        
-                    return $user;
 
-                }
-                else
-                {
+                    return $user;
+                } else {
                     throw new Exception("L'adresse mail ou le mot de passe est incorrect");
                 }
             }
-        }
-        catch(Exception $e){
+        } catch (Exception $e) {
             // throw new Exception($e->getMessage());
             $result = 'Erreur : ' . $e->getMessage();
             return $result;

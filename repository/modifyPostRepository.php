@@ -6,14 +6,19 @@ use blog\config\ConnectDb;
 use Exception;
 use PDO;
 
-class modifyPostRepository {
-    public static function modifyPost($id, $titre, $chapo, $contenu) {
+class ModifyPostRepository
+{
+    public static function modifyPost($id, $titre, $chapo, $contenu)
+    {
 
         $instance = ConnectDb::getInstance();
         $conn = $instance->getConnection();
 
         $query = $conn->prepare("UPDATE posts 
-                                SET titre = :titre, date_modification = :date_modification, chapo = :chapo, contenu = :contenu
+                                SET titre = :titre,
+                                    date_modification = :date_modification,
+                                    chapo = :chapo,
+                                    contenu = :contenu
                                 WHERE ID_post = :id");
 
         // Liez les valeurs aux marqueurs de paramètres
@@ -23,17 +28,13 @@ class modifyPostRepository {
         $query->bindValue(':chapo', $chapo, PDO::PARAM_STR);
         $query->bindValue(':contenu', $contenu, PDO::PARAM_STR);
 
-        if ($query->execute())
-        {
+        if ($query->execute()) {
             return $id;
-        }
-        else
-        {
+        } else {
             $erreur = "Une erreur est survenue \n";
             $erreur .= "Veuillez réessayer";
 
             throw new Exception($erreur);
         }
-
     }
 }

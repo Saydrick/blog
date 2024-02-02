@@ -2,24 +2,25 @@
 
 namespace blog\controllers;
 
-use blog\repository\modifyCommentRepository;
-use blog\service\validateService;
+use blog\repository\ModifyCommentRepository;
+use blog\service\ValidateService;
 use blog\Exceptions\Exception;
 
-class modifyCommentController {
+class ModifyCommentController
+{
+    protected ModifyCommentRepository $ModifyCommentRepository;
+    protected ValidateService $ValidateService;
 
-    protected modifyCommentRepository $_modifyCommentRepository;
-    protected validateService $_validateService;
-
-    function __construct(modifyCommentRepository $modifyCommentRepository, validateService $validateService) {
-        $this->_modifyCommentRepository = $modifyCommentRepository;
-        $this->_validateService = $validateService;
+    public function __construct(ModifyCommentRepository $ModifyCommentRepository, ValidateService $ValidateService)
+    {
+        $this->ModifyCommentRepository = $ModifyCommentRepository;
+        $this->ValidateService = $ValidateService;
     }
 
-    function update($id_comment, $id_post) {
+    public function update($id_comment, $id_post)
+    {
         try {
-            if(isset($_POST['envoyer'])) {
-
+            if (isset($_POST['envoyer'])) {
                 // If token is not difined OR if post token is different from the session token
                 if (!$_POST['token'] || $_POST['token'] !== $_SESSION['TOKEN']) {
                     // show an error message
@@ -32,22 +33,20 @@ class modifyCommentController {
                 $formRules = [
                     'commentaire' => ['type' => 'required', 'message' => 'Veuillez renseigner le titre de l\'article']
                 ];
-            
-                $this->_validateService->formValidate($_POST, $formRules);
+
+                $this->ValidateService->formValidate($_POST, $formRules);
 
                 $comment = strip_tags($_POST['commentaire']);
 
-                $result = $this->_modifyCommentRepository->modifyComment($id_comment, $id_post, $comment);      
+                $result = $this->ModifyCommentRepository->modifyComment($id_comment, $id_post, $comment);
 
                 header("Location: /blog/public/post/" . $result);
-                exit;                       
+                exit;
             }
-                        
         } catch (Exception $e) {
             $result = 'Erreur : ' . $e->errorMessage();
         }
 
         // return $result;
     }
-
 }

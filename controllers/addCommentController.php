@@ -3,23 +3,24 @@
 namespace blog\controllers;
 
 use blog\repository\addCommentRepository;
-use blog\service\validateService;
+use blog\service\ValidateService;
 use blog\Exceptions\Exception;
 
-class addCommentController {
+class AddCommentController
+{
+    protected addCommentRepository $addCommentRepository;
+    protected ValidateService $ValidateService;
 
-    protected addCommentRepository $_addCommentRepository;
-    protected validateService $_validateService;
-
-    function __construct(addCommentRepository $addCommentRepository, validateService $validateService) {
-        $this->_addCommentRepository = $addCommentRepository;
-        $this->_validateService = $validateService;
+    public function __construct(addCommentRepository $addCommentRepository, ValidateService $ValidateService)
+    {
+        $this->addCommentRepository = $addCommentRepository;
+        $this->ValidateService = $ValidateService;
     }
 
-    function create($id_post) {
+    public function create($id_post)
+    {
         try {
-            if(isset($_POST['envoyer'])) {
-
+            if (isset($_POST['envoyer'])) {
                 // If token is not difined OR if post token is different from the session token
                 if (!$_POST['token'] || $_POST['token'] !== $_SESSION['TOKEN']) {
                     // show an error message
@@ -28,26 +29,27 @@ class addCommentController {
                     header($_SERVER['SERVER_PROTOCOL'] . ' 405 Method Not Allowed');
                     exit;
                 }
-                
+
                 $formRules = [
-                    'commentaire' => ['type' => 'required', 'message' => 'Veuillez écrire un commentaire avant de valider']
+                    'commentaire' => [
+                        'type' => 'required',
+                        'message' => 'Veuillez écrire un commentaire avant de valider'
+                        ]
                 ];
-            
-                $this->_validateService->formValidate($_POST, $formRules);
+
+                $this->ValidateService->formValidate($_POST, $formRules);
 
                 $comment = strip_tags($_POST['commentaire']);
 
-                $result = $this->_addCommentRepository->addComment($comment, $id_post);      
+                $result = $this->addCommentRepository->addComment($comment, $id_post);
 
                 header("Location: /blog/public/post/" . $result);
-                exit;                       
+                exit;
             }
-                        
         } catch (Exception $e) {
             $result = 'Erreur : ' . $e->errorMessage();
         }
 
         // return $result;
     }
-
 }

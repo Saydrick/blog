@@ -1,22 +1,21 @@
 <?php
 
-namespace blog\helper;
+namespace blog\Helper;
 
-class helper {
-    public static function dateFormat($date) {
+class Helper
+{
+    public static function dateFormat($date)
+    {
         $annee = substr($date, 0, 4);
         $mois = substr($date, 5, 2);
 
-        if (substr($date, 8, 1) == '0')
-        {
+        if (substr($date, 8, 1) == '0') {
             $jour = substr($date, 9);
-        }
-        else
-        {
+        } else {
             $jour = substr($date, 8);
         }
 
-        match($mois) {
+        match ($mois) {
             '01' => $mois = 'Janvier',
             '02' => $mois = 'Février',
             '03' => $mois = 'Mars',

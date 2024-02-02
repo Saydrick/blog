@@ -2,22 +2,23 @@
 
 namespace blog\controllers;
 
-use blog\repository\deletePostRepository;
-use blog\service\validateService;
+use blog\repository\DeletePostRepository;
+use blog\service\ValidateService;
 use blog\Exceptions\Exception;
 
-class deletePostController {
+class DeletePostController
+{
+    protected DeletePostRepository $DeletePostRepository;
 
-    protected deletePostRepository $_deletePostRepository;
-
-    function __construct(deletePostRepository $deletePostRepository) {
-        $this->_deletePostRepository = $deletePostRepository;
+    public function __construct(DeletePostRepository $DeletePostRepository)
+    {
+        $this->DeletePostRepository = $DeletePostRepository;
     }
 
-    function delete($id) {
+    public function delete($id)
+    {
         try {
-            if(isset($_POST['envoyer'])) {
-
+            if (isset($_POST['envoyer'])) {
                 // If token is not difined OR if post token is different from the session token
                 if (!$_POST['token'] || $_POST['token'] !== $_SESSION['TOKEN']) {
                     // show an error message
@@ -27,17 +28,15 @@ class deletePostController {
                     exit;
                 }
 
-                $result = $this->_deletePostRepository->deletePost($id);      
+                $result = $this->DeletePostRepository->deletePost($id);
 
                 header("Location: /blog/public/all-posts");
-                exit;                       
+                exit;
             }
-                        
         } catch (Exception $e) {
             $result = 'Erreur : ' . $e->errorMessage();
         }
 
         // return $result;
     }
-
 }

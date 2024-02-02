@@ -2,9 +2,11 @@
 
 namespace blog\config;
 
-class requireLoader {
-    public static function register() {
-        spl_autoload_register(function($className) {
+class RequireLoader
+{
+    public static function register()
+    {
+        spl_autoload_register(function ($className) {
             // Convertir le nom de la classe en chemin de fichier
             $classFile = str_replace('\\', '/', $className) . '.php';
 
@@ -16,8 +18,8 @@ class requireLoader {
     }
 }
 
-// Enregistrez l'autoloader
-requireloader::register();
+// Enregistrer l'autoloader
+RequireLoader::register();
 
 // Inclure l'autoloader Composer
 require '../vendor/autoload.php';

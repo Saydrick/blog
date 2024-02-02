@@ -2,18 +2,20 @@
 
 namespace blog\controllers;
 
-use blog\repository\postRepository;
+use blog\repository\PostRepository;
 
-class postController {
+class PostController
+{
+    protected PostRepository $PostRepository;
 
-    protected postRepository $_postRepository;
-
-    function __construct(postRepository $postRepository) {
-        $this->_postRepository = $postRepository;
+    public function __construct(PostRepository $PostRepository)
+    {
+        $this->PostRepository = $PostRepository;
     }
 
-    function index($id) {
-        $post = $this->_postRepository->getPost($id);
+    public function index($id)
+    {
+        $post = $this->PostRepository->getPost($id);
         return $post;
     }
 }

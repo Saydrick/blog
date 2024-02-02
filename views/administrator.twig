@@ -14,11 +14,11 @@
                                         <p>par <span id="auteur">{{ comment.auteur }}</span> le {{ comment.date_modification }}</p>
                                         <p>{{ comment.message }}</p>
                                     </div>
-                                    <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
+                                    <div class="col-xs-3 col-sm-3 col-md-1 col-lg-1">
                                         <button class="admin_img"><a href="/blog/public/admin/validateComment/{{ comment.id_commentaire }}"><img src="/blog/views/Component/img/validation.png" alt="Valider ce commentaire"></a></button>
                                     </div>
 
-                                    <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
+                                    <div class="col-xs-3 col-sm-3 col-md-1 col-lg-1">
                                         <button class="admin_img"><a href="/blog/public/admin/denyComment/{{ comment.id_commentaire }}"><img src="/blog/views/Component/img/refus.png" alt="Refuser ce commentaire"></a></button>
                                     </div>
 

@@ -6,8 +6,10 @@ use blog\config\ConnectDb;
 use Exception;
 use PDO;
 
-class deletePostRepository {
-    public static function deletePost($id) {
+class DeletePostRepository
+{
+    public static function deletePost($id)
+    {
 
         $instance = ConnectDb::getInstance();
         $conn = $instance->getConnection();
@@ -17,17 +19,13 @@ class deletePostRepository {
 
         $query->bindValue(':id', $id, PDO::PARAM_INT);
 
-        if ($query->execute())
-        {
+        if ($query->execute()) {
             return $id;
-        }
-        else
-        {
+        } else {
             $error = "Une erreur est survenue \n";
             $error .= "Veuillez réessayer";
 
             throw new Exception($error);
         }
-
     }
 }

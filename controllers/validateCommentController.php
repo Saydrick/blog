@@ -2,29 +2,29 @@
 
 namespace blog\controllers;
 
-use blog\repository\validateCommentRepository;
+use blog\repository\ValidateCommentRepository;
 use blog\Exceptions\Exception;
 
-class validateCommentController {
+class ValidateCommentController
+{
+    protected ValidateCommentRepository $ValidateCommentRepository;
 
-    protected validateCommentRepository $_validateCommentRepository;
-
-    function __construct(validateCommentRepository $validateCommentRepository) {
-        $this->_validateCommentRepository = $validateCommentRepository;
+    public function __construct(ValidateCommentRepository $ValidateCommentRepository)
+    {
+        $this->ValidateCommentRepository = $ValidateCommentRepository;
     }
 
-    function update($id_comment) {
+    public function update($id_comment)
+    {
         try {
-            $result = $this->_validateCommentRepository->validateComment($id_comment);      
+            $result = $this->ValidateCommentRepository->validateComment($id_comment);
 
             header("Location: /blog/public/admin");
-            exit;                       
-                        
+            exit;
         } catch (Exception $e) {
             $result = 'Erreur : ' . $e->errorMessage();
         }
 
         // return $result;
     }
-
 }

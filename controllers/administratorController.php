@@ -2,25 +2,28 @@
 
 namespace blog\controllers;
 
-use blog\repository\administratorRepository;
+use blog\repository\AdministratorRepository;
 
-class administratorController {
+class AdministratorController
+{
+    protected AdministratorRepository $AdministratorRepository;
 
-    protected administratorRepository $_administratorRepository;
-
-    function __construct(administratorRepository $administratorRepository) {
-        $this->_administratorRepository = $administratorRepository;
+    public function __construct(AdministratorRepository $AdministratorRepository)
+    {
+        $this->AdministratorRepository = $AdministratorRepository;
     }
 
     /* recovery of all posts */
-    function postsIndex() {
-        $posts = $this->_administratorRepository->getPosts();
+    public function postsIndex()
+    {
+        $posts = $this->AdministratorRepository->getPosts();
         return $posts;
     }
 
     /* recovery of all comments */
-    function commentsIndex() {
-        $comments = $this->_administratorRepository->getComments();
+    public function commentsIndex()
+    {
+        $comments = $this->AdministratorRepository->getComments();
         return $comments;
     }
 }

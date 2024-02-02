@@ -6,8 +6,10 @@ use blog\config\ConnectDb;
 use Exception;
 use PDO;
 
-class denyCommentRepository {
-    public static function denyComment($id_comment) {
+class DenyCommentRepository
+{
+    public static function denyComment($id_comment)
+    {
 
         $instance = ConnectDb::getInstance();
         $conn = $instance->getConnection();
@@ -20,17 +22,13 @@ class denyCommentRepository {
 
         // var_dump($query);
 
-        if ($query->execute())
-        {
+        if ($query->execute()) {
             return;
-        }
-        else
-        {
+        } else {
             $erreur = "Une erreur est survenue \n";
             $erreur .= "Veuillez réessayer";
 
             throw new Exception($erreur);
         }
-
     }
 }

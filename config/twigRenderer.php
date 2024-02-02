@@ -2,14 +2,15 @@
 
 namespace blog\config;
 
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
 
-use \Twig\Environment;
-use \Twig\Loader\FilesystemLoader;
-
-class TwigRenderer {
+class TwigRenderer
+{
     private $twig;
 
-    public function __construct($viewsPath) {
+    public function __construct($viewsPath)
+    {
         $loader = new FilesystemLoader($viewsPath);
         $this->twig = new Environment($loader, [
             'cache' => false,
@@ -17,7 +18,8 @@ class TwigRenderer {
         ]);
     }
 
-    public function render($template, $params) {
+    public function render($template, $params)
+    {
         return $this->twig->render($template, $params);
     }
 }

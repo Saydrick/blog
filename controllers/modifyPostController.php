@@ -2,24 +2,25 @@
 
 namespace blog\controllers;
 
-use blog\repository\modifyPostRepository;
-use blog\service\validateService;
+use blog\repository\ModifyPostRepository;
+use blog\service\ValidateService;
 use blog\Exceptions\Exception;
 
-class modifyPostController {
+class ModifyPostController
+{
+    protected ModifyPostRepository $ModifyPostRepository;
+    protected ValidateService $ValidateService;
 
-    protected modifyPostRepository $_modifyPostRepository;
-    protected validateService $_validateService;
-
-    function __construct(modifyPostRepository $modifyPostRepository, validateService $validateService) {
-        $this->_modifyPostRepository = $modifyPostRepository;
-        $this->_validateService = $validateService;
+    public function __construct(ModifyPostRepository $ModifyPostRepository, ValidateService $ValidateService)
+    {
+        $this->ModifyPostRepository = $ModifyPostRepository;
+        $this->ValidateService = $ValidateService;
     }
 
-    function update($id) {
+    public function update($id)
+    {
         try {
-            if(isset($_POST['envoyer'])) {
-
+            if (isset($_POST['envoyer'])) {
                 // If token is not difined OR if post token is different from the session token
                 if (!$_POST['token'] || $_POST['token'] !== $_SESSION['TOKEN']) {
                     // show an error message
@@ -33,33 +34,28 @@ class modifyPostController {
                     'titre' => ['type' => 'required', 'message' => 'Veuillez renseigner le titre de l\'article'],
                     'contenu' => ['type' => 'required', 'message' => 'Veuillez renseigner le contenu de l\'article']
                 ];
-            
-                $this->_validateService->formValidate($_POST, $formRules);
 
-                if ($_POST['chapo'] == '')
-                {
+                $this->ValidateService->formValidate($_POST, $formRules);
+
+                if ($_POST['chapo'] == '') {
                     $content = strip_tags($_POST['contenu']);
                     $chapo = substr($content, 0, 100);
-                }
-                else
-                {
-                    $chapo = strip_tags($_POST['chapo']); 
+                } else {
+                    $chapo = strip_tags($_POST['chapo']);
                 }
 
-                $titre = strip_tags($_POST['titre']); 
-                $contenu = nl2br(strip_tags($_POST['contenu'])); 
+                $titre = strip_tags($_POST['titre']);
+                $contenu = nl2br(strip_tags($_POST['contenu']));
 
-                $result = $this->_modifyPostRepository->modifyPost($id, $titre, $chapo, $contenu);      
+                $result = $this->ModifyPostRepository->modifyPost($id, $titre, $chapo, $contenu);
 
                 header("Location: /blog/public/post/" . $result);
-                exit;                       
+                exit;
             }
-                        
         } catch (Exception $e) {
             $result = 'Erreur : ' . $e->errorMessage();
         }
 
         // return $result;
     }
-
 }

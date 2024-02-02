@@ -2,28 +2,32 @@
 
 namespace blog\controllers;
 
-use blog\repository\registerRepository;
-use blog\repository\userRepository;
-use blog\service\validateService;
+use blog\repository\RegisterRepository;
+use blog\repository\UserRepository;
+use blog\service\ValidateService;
 use blog\Exceptions\Exception;
 
-class registerController {
+class RegisterController
+{
+    protected RegisterRepository $RegisterRepository;
+    protected UserRepository $UserRepository;
+    protected ValidateService $ValidateService;
 
-    protected registerRepository $_registerRepository;
-    protected userRepository $_userRepository;
-    protected validateService $_validateService;
-
-    function __construct(registerRepository $registerRepository, userRepository $userRepository, validateService $validateService) {
-        $this->_registerRepository = $registerRepository;
-        $this->_userRepository = $userRepository;
-        $this->_validateService = $validateService;
+    public function __construct(
+        RegisterRepository $RegisterRepository,
+        UserRepository $UserRepository,
+        ValidateService $ValidateService
+    ) {
+        $this->RegisterRepository = $RegisterRepository;
+        $this->UserRepository = $UserRepository;
+        $this->ValidateService = $ValidateService;
     }
 
-    function create() {
+    public function create()
+    {
 
         try {
-            if(isset($_POST['envoyer'])) {
-
+            if (isset($_POST['envoyer'])) {
                 // If token is not difined OR if post token is different from the session token
                 if (!$_POST['token'] || $_POST['token'] !== $_SESSION['TOKEN']) {
                     // show an error message
@@ -34,25 +38,40 @@ class registerController {
                 }
 
                 $formRules = [
-                    'nom' => ['type' => 'required', 'message' => 'Veuillez renseigner votre nom'],
-                    'prenom' => ['type' => 'required', 'message' => 'Veuillez renseigner votre prénom'],
-                    'mail' => ['type' => 'email', 'message' => 'L\'adresse mail entrée est incorrecte'],
-                    'password' => ['type' => 'required', 'message' => 'Veuillez renseigner votre mot de passe'],
-                    'confirm_password' => ['type' => 'confirm_password', 'fieldToConfirm' => 'password', 'message' => 'Les mots de passe ne correspondent pas']
+                    'nom' => [
+                        'type' => 'required',
+                        'message' => 'Veuillez renseigner votre nom'
+                    ],
+                    'prenom' => [
+                        'type' => 'required',
+                        'message' => 'Veuillez renseigner votre prénom'
+                    ],
+                    'mail' => [
+                        'type' => 'email',
+                        'message' => 'L\'adresse mail entrée est incorrecte'
+                    ],
+                    'password' => [
+                        'type' => 'required',
+                        'message' => 'Veuillez renseigner votre mot de passe'
+                    ],
+                    'confirm_password' => [
+                        'type' => 'confirm_password',
+                        'fieldToConfirm' => 'password',
+                        'message' => 'Les mots de passe ne correspondent pas'
+                    ]
                 ];
-            
-                $this->_validateService->formValidate($_POST, $formRules);
 
-                $nom = strip_tags($_POST['nom']); 
+                $this->ValidateService->formValidate($_POST, $formRules);
+
+                $nom = strip_tags($_POST['nom']);
                 $prenom = strip_tags($_POST['prenom']);
                 $email = strip_tags($_POST['mail']);
                 $password = password_hash(strip_tags($_POST['password']), PASSWORD_BCRYPT);
 
-                $newUser = $this->_registerRepository->newUser($nom, $prenom, $email, $password);
+                $newUser = $this->RegisterRepository->newUser($nom, $prenom, $email, $password);
 
-                if(is_numeric($newUser))
-                {
-                    $user = $this->_userRepository->getUser($newUser);
+                if (is_numeric($newUser)) {
+                    $user = $this->UserRepository->getUser($newUser);
 
                     $_SESSION['USER_ID'] = $user['id'];
                     $_SESSION['USER_MAIL'] = $user['email'];
@@ -61,16 +80,10 @@ class registerController {
                     $_SESSION['USER_ADMIN'] = $user['is_admin'];
 
                     header("Location: /blog/public/");
-                }
-                else
-                {
+                } else {
                     throw new Exception($newUser);
                 }
-
-                
-                             
             }
-                        
         } catch (Exception $e) {
             $result = 'Erreur : ' . $e->errorMessage();
         }

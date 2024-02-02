@@ -1,36 +1,41 @@
 <?php
 
-/* TODO */
 namespace blog\controllers;
 
-use blog\repository\denyCommentRepository;
-use blog\repository\userRepository;
+use blog\repository\DenyCommentRepository;
+use blog\repository\UserRepository;
 use PHPMailer\PHPMailer\PHPMailer;
-use blog\service\validateService;
+use blog\service\ValidateService;
 use blog\Exceptions\Exception;
 
-class denyCommentController {
-
-    protected denyCommentRepository $_denyCommentRepository;
-    protected userRepository $_userRepository;
+class DenyCommentController
+{
+    protected DenyCommentRepository $DenyCommentRepository;
+    protected UserRepository $UserRepository;
     protected PHPMailer $PHPMailer;
-    protected validateService $_validateService;
+    protected ValidateService $ValidateService;
 
-    function __construct(denyCommentRepository $denyCommentRepository, userRepository $userRepository, PHPMailer $PHPMailer, validateService $validateService) {
-        $this->_denyCommentRepository = $denyCommentRepository;
-        $this->_userRepository = $userRepository;
-        $this->PHPMailer = $PHPMailer; 
-        $this->_validateService = $validateService;
+    public function __construct(
+        DenyCommentRepository $DenyCommentRepository,
+        UserRepository $UserRepository,
+        PHPMailer $PHPMailer,
+        ValidateService $ValidateService
+    ) {
+        $this->DenyCommentRepository = $DenyCommentRepository;
+        $this->UserRepository = $UserRepository;
+        $this->PHPMailer = $PHPMailer;
+        $this->ValidateService = $ValidateService;
     }
 
-    function delete($id_comment, $id_user) {
+    public function delete($id_comment, $id_user)
+    {
         try {
             // Send mail to user to explain the deny
             $phpmailer = new PHPMailer(true);
 
             try {
                 //Server settings
-                // $phpmailer->SMTPDebug = SMTP::DEBUG_SERVER;  
+                // $phpmailer->SMTPDebug = SMTP::DEBUG_SERVER;
                 $phpmailer->isSMTP();
                 $phpmailer->Host = 'sandbox.smtp.mailtrap.io';
                 $phpmailer->SMTPAuth = true;
@@ -39,8 +44,7 @@ class denyCommentController {
                 $phpmailer->Password = '0fa568225101b2';
 
 
-                if(isset($_POST['envoyer'])) {
-
+                if (isset($_POST['envoyer'])) {
                     // If token is not difined OR if post token is different from the session token
                     if (!$_POST['token'] || $_POST['token'] !== $_SESSION['TOKEN']) {
                         // show an error message
@@ -49,22 +53,22 @@ class denyCommentController {
                         header($_SERVER['SERVER_PROTOCOL'] . ' 405 Method Not Allowed');
                         exit;
                     }
-                    
+
                     $formRules = [
                         'motif' => ['type' => 'required', 'message' => 'Veuillez renseigner votre motif']
                     ];
-                
-                    $this->_validateService->formValidate($_POST, $formRules);
+
+                    $this->ValidateService->formValidate($_POST, $formRules);
 
                     $message = strip_tags($_POST['motif']);
 
                     // Delete comment from DB
-                    $result = $this->_denyCommentRepository->denyComment($id_comment);    
+                    $result = $this->DenyCommentRepository->denyComment($id_comment);
 
                     // User and admin Recovery
-                    $comment_user = $this->_userRepository->getUser($id_user);
-                    $admin_user = $this->_userRepository->getUser($_SESSION['USER_ID']);
-                    
+                    $comment_user = $this->UserRepository->getUser($id_user);
+                    $admin_user = $this->UserRepository->getUser($_SESSION['USER_ID']);
+
                     $comment_email = $comment_user['email'];
                     $comment_nom = $comment_user['nom'];
                     $comment_prenom = $comment_user['prenom'];
@@ -81,7 +85,7 @@ class denyCommentController {
 
                     //Content
                     $phpmailer->isHTML(true);    //Set email format to HTML
-                    $phpmailer->CharSet = 'UTF-8'; 
+                    $phpmailer->CharSet = 'UTF-8';
                     $phpmailer->Encoding = 'base64';
                     $phpmailer->Subject = 'Blog Bouzanquet Cédric : Votre commentaire a été refusé';
                     $phpmailer->Body    = $message;
@@ -89,8 +93,7 @@ class denyCommentController {
                     $phpmailer->send();
 
                     $result = 'Votre message a bien été envoyé';
-                }            
-
+                }
             } catch (Exception $e) {
                 $result = 'Erreur : ' . $e->getMessage();
             }
@@ -98,13 +101,11 @@ class denyCommentController {
 
 
             header("Location: /blog/public/admin");
-            exit;                       
-                        
+            exit;
         } catch (Exception $e) {
             $result = 'Erreur : ' . $e->errorMessage();
         }
 
         return $result;
     }
-
 }

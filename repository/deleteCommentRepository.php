@@ -6,8 +6,10 @@ use blog\config\ConnectDb;
 use Exception;
 use PDO;
 
-class deleteCommentRepository {
-    public static function deleteComment($id_post, $id_comment) {
+class DeleteCommentRepository
+{
+    public static function deleteComment($id_post, $id_comment)
+    {
 
         $instance = ConnectDb::getInstance();
         $conn = $instance->getConnection();
@@ -20,17 +22,13 @@ class deleteCommentRepository {
 
         var_dump($query);
 
-        if ($query->execute())
-        {
+        if ($query->execute()) {
             return $id_post;
-        }
-        else
-        {
+        } else {
             $error = "Une erreur est survenue \n";
             $error .= "Veuillez réessayer";
 
             throw new Exception($error);
         }
-
     }
 }

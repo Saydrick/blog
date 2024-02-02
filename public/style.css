@@ -4,6 +4,10 @@ body {
     padding: 15px;
 }
 
+main {
+    min-height: 600px;
+}
+
 .center {
     margin: auto;
     text-align: center;
@@ -16,7 +20,7 @@ body {
 
 a {
     text-decoration: none;
-    color: #fff;
+    color: #008090;
 }
 
 p {
@@ -56,6 +60,7 @@ blockquote {
 
 .header_row {
     height: 100%;
+    margin-bottom: 10px;
 }
 
 .logo_header {
@@ -147,7 +152,7 @@ blockquote {
 .footer_li a {
     display: block;
     color: #008090;
-    padding: 0 50px;
+    padding: 0 40px;
     text-transform: uppercase;
     /* border-bottom: white solid 4px; */
     font-weight: bold;
@@ -164,7 +169,7 @@ blockquote {
 .li_logo {
     list-style: none;
     line-height: 40px;
-    margin-left: 7%;
+    margin-left: 5%;
 }
 
 .li_logo img {
@@ -455,10 +460,62 @@ form h4 {
 }
 
 /* RESPONSIVE */
-/* @media screen and (max-width: 1200px) {
-
+@media screen and (max-width: 1024px) {
+    main {
+        min-height: 970px;
+    }
     
-} */
+} 
+
+@media screen and (max-width: 768px) {
+    /* FOOTER */
+    .borderLR {
+        border: 0;
+    }
+
+    #socialNetwork {
+        margin-top: 40px;
+    }
+
+    .li_logo {
+        margin-left: 12%;
+    }
+    
+} 
+
+@media screen and (max-width: 480px) {
+    /* BODY */
+    main {
+        min-height: 250px;
+    }
+    /* HEADER */
+    .logo_header img{
+        width: 20%;
+    }
+
+    /* FOOTER */
+    .logo_footer img{
+        width: 15%;
+    }
+
+    .menu_footer {
+        margin-bottom: 5%;
+    }
+
+    #socialNetwork {
+        margin-top: 0;
+    }
+
+    .footer_li a {
+        padding: 0 25px;
+    }
+
+    .li_logo {
+        margin-left: 5%;
+    }
+
+    /*  */
+}
 
 
 

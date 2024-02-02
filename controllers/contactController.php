@@ -3,29 +3,29 @@
 namespace blog\controllers;
 
 use PHPMailer\PHPMailer\PHPMailer;
-use blog\service\validateService;
+use blog\service\ValidateService;
 use blog\Exceptions\Exception;
 
-require_once('../config/requireLoader.php');
-
-class contactController {
-
+class ContactController
+{
     protected PHPMailer $PHPMailer;
-    protected validateService $_validateService;
+    protected ValidateService $ValidateService;
 
-    function __construct(PHPMailer $PHPMailer, validateService $validateService) {
-        $this->PHPMailer = $PHPMailer; 
-        $this->_validateService = $validateService;
+    public function __construct(PHPMailer $PHPMailer, ValidateService $ValidateService)
+    {
+        $this->PHPMailer = $PHPMailer;
+        $this->ValidateService = $ValidateService;
     }
 
-    function index() {
+    public function index()
+    {
 
 
         $phpmailer = new PHPMailer(true);
 
         try {
             //Server settings
-            // $phpmailer->SMTPDebug = SMTP::DEBUG_SERVER;  
+            // $phpmailer->SMTPDebug = SMTP::DEBUG_SERVER;
             $phpmailer->isSMTP();
             $phpmailer->Host = 'sandbox.smtp.mailtrap.io';
             $phpmailer->SMTPAuth = true;
@@ -34,8 +34,7 @@ class contactController {
             $phpmailer->Password = '0fa568225101b2';
 
 
-            if(isset($_POST['envoyer'])) {
-
+            if (isset($_POST['envoyer'])) {
                 // If token is not difined OR if post token is different from the session token
                 if (!$_POST['token'] || $_POST['token'] !== $_SESSION['TOKEN']) {
                     // show an error message
@@ -44,7 +43,7 @@ class contactController {
                     header($_SERVER['SERVER_PROTOCOL'] . ' 405 Method Not Allowed');
                     exit;
                 }
-                
+
                 $formRules = [
                     'nom' => ['type' => 'required', 'message' => 'Veuillez renseigner votre nom'],
                     'prenom' => ['type' => 'required', 'message' => 'Veuillez renseigner votre prénom'],
@@ -52,8 +51,8 @@ class contactController {
                     'sujet' => ['type' => 'required', 'message' => 'Veuillez renseigner le sujet de votre message'],
                     'message' => ['type' => 'required', 'message' => 'Veuillez renseigner votre message']
                 ];
-            
-                $this->_validateService->formValidate($_POST, $formRules);
+
+                $this->ValidateService->formValidate($_POST, $formRules);
 
                 $nom = strip_tags($_POST['nom']);
                 $prenom = strip_tags($_POST['prenom']);
@@ -77,8 +76,7 @@ class contactController {
                 $phpmailer->send();
 
                 $result = 'Votre message a bien été envoyé';
-            }            
-
+            }
         } catch (Exception $e) {
             $result = 'Erreur : ' . $e->getMessage();
         }

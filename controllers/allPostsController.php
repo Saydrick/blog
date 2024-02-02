@@ -2,18 +2,20 @@
 
 namespace blog\controllers;
 
-use blog\repository\allPostsRepository;
+use blog\repository\AllPostsRepository;
 
-class allPostsController {
+class AllPostsController
+{
+    protected AllPostsRepository $AllPostsRepository;
 
-    protected allPostsRepository $_allPostsRepository;
-
-    function __construct(allPostsRepository $allPostsRepository) {
-        $this->_allPostsRepository = $allPostsRepository;
+    public function __construct(AllPostsRepository $AllPostsRepository)
+    {
+        $this->AllPostsRepository = $AllPostsRepository;
     }
 
-    function index() {
-        $posts = $this->_allPostsRepository->getAllPosts();
+    public function index()
+    {
+        $posts = $this->AllPostsRepository->getAllPosts();
         return $posts;
     }
 }

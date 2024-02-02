@@ -2,23 +2,26 @@
 
 namespace blog\controllers;
 
-use blog\repository\commentRepository;
+use blog\repository\CommentRepository;
 
-class commentController {
+class CommentController
+{
+    protected CommentRepository $CommentRepository;
 
-    protected commentRepository $_commentRepository;
-
-    function __construct(commentRepository $commentRepository) {
-        $this->_commentRepository = $commentRepository;
+    public function __construct(CommentRepository $CommentRepository)
+    {
+        $this->CommentRepository = $CommentRepository;
     }
 
-    function index_all($id_post) {
-        $comment = $this->_commentRepository->getAllComment($id_post);
+    public function indexAll($id_post)
+    {
+        $comment = $this->CommentRepository->getAllComment($id_post);
         return $comment;
     }
 
-    function index($id_comment) {
-        $comment = $this->_commentRepository->getComment($id_comment);
+    public function index($id_comment)
+    {
+        $comment = $this->CommentRepository->getComment($id_comment);
         return $comment;
     }
 }
