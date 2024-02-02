@@ -3,7 +3,7 @@
 namespace blog\repository;
 
 use blog\config\ConnectDb;
-use blog\Enum\IsChecked;
+use blog\Enumeration\IsChecked;
 use blog\Helper\Helper;
 use PDO;
 

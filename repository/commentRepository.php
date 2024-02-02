@@ -4,7 +4,7 @@ namespace blog\repository;
 
 use blog\config\ConnectDb;
 use blog\Helper\Helper;
-use blog\Enum\IsChecked;
+use blog\Enumeration\IsChecked;
 use PDO;
 
 class CommentRepository
