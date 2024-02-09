@@ -3,6 +3,7 @@
 session_start();
 
 use PHPMailer\PHPMailer\PHPMailer;
+use blog\config\TwigRenderer;
 use blog\controllers\AllPostsController;
 use blog\controllers\AdministratorController;
 
@@ -14,7 +15,7 @@ if (!isset($_SESSION['TOKEN'])) {
     $_SESSION['TOKEN'] = bin2hex(openssl_random_pseudo_bytes(6));
 }
 
-$twigRenderer = new \blog\config\TwigRenderer(__DIR__ . '/../views');
+$twigRenderer = new TwigRenderer(__DIR__ . '/../views');
 
 $router = new AltoRouter();
 $router->setBasePath('/blog/public');
