@@ -7,9 +7,6 @@ use blog\config\TwigRenderer;
 use blog\controllers\AllPostsController;
 use blog\controllers\AdministratorController;
 
-// require_once('../config/requireLoader.php');
-require_once('../config/twigRenderer.php');
-require_once('../repository/AdministratorRepository.php');
 // Inclure l'autoloader Composer
 require '../vendor/autoload.php';
 
