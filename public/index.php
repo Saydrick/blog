@@ -42,7 +42,7 @@ $router->map('GET', '/', function () use ($twigRenderer) {
                                 /* ADMINISTRATOR */
 $router->map('GET', '/admin', function () use ($twigRenderer) {
     // require_once('../config/RequireLoader.php');
-    require_once('../repository/AdministratorRepository.php');
+    // require_once('../repository/AdministratorRepository.php');
 
     // Retrieving the SESSION superglobal variable
     $session_token = $_SESSION['TOKEN'];
