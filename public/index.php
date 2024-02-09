@@ -3,6 +3,7 @@
 session_start();
 
 use PHPMailer\PHPMailer\PHPMailer;
+use blog\controllers\AllPostsController;
 use blog\controllers\AdministratorController;
 
 require_once('../config/requireLoader.php');
@@ -360,13 +361,15 @@ $router->map('GET', '/all-posts', function () use ($twigRenderer) {
     require('../config/ConnectDb.php');
     require('../helper/helper.php');
 
+    
+
     // Retrieving the SESSION superglobal variable
     $session_token = $_SESSION['TOKEN'];
     $session_id = !empty($_SESSION['USER_ID']) ? $_SESSION['USER_ID'] : null;
     $session_admin = !empty($_SESSION['USER_ADMIN']) ? $_SESSION['USER_ADMIN'] : null;
 
     // Class instantiation
-    $controller = new \blog\controllers\AllPostsController(new \blog\repository\AllPostsRepository());
+    $controller = new AllPostsController(new \blog\repository\AllPostsRepository());
 
     // Call a controller method
     $posts = $controller->index();
