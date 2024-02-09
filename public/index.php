@@ -5,7 +5,8 @@ session_start();
 use PHPMailer\PHPMailer\PHPMailer;
 use blog\controllers\AdministratorController;
 
-require_once('../config/RequireLoader.php');
+require_once('../config/requireLoader.php');
+require_once('../config/twigRenderer.php');
 require_once('../repository/AdministratorRepository.php');
 
 if (!isset($_SESSION['TOKEN'])) {
@@ -354,6 +355,10 @@ $router->map('POST', '/contact', function () use ($twigRenderer) {
                                 /* POSTS */
 $router->map('GET', '/all-posts', function () use ($twigRenderer) {
     require_once('../config/RequireLoader.php');
+    require('../controllers/AllPostsController.php');
+    require('../repository/allPostsRepository.php');
+    require('../config/ConnectDb.php');
+    require('../helper/helper.php');
 
     // Retrieving the SESSION superglobal variable
     $session_token = $_SESSION['TOKEN'];
