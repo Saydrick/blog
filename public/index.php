@@ -10,6 +10,8 @@ use blog\controllers\AdministratorController;
 // require_once('../config/requireLoader.php');
 require_once('../config/twigRenderer.php');
 require_once('../repository/AdministratorRepository.php');
+// Inclure l'autoloader Composer
+require '../vendor/autoload.php';
 
 if (!isset($_SESSION['TOKEN'])) {
     $_SESSION['TOKEN'] = bin2hex(openssl_random_pseudo_bytes(6));
