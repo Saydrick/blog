@@ -2,10 +2,6 @@
 
 session_start();
 
-use PHPMailer\PHPMailer\PHPMailer;
-use blog\config\TwigRenderer;
-use blog\controllers\AllPostsController;
-use blog\controllers\AdministratorController;
 
 // Inclure l'autoloader Composer
 require '../vendor/autoload.php';
@@ -14,7 +10,7 @@ if (!isset($_SESSION['TOKEN'])) {
     $_SESSION['TOKEN'] = bin2hex(openssl_random_pseudo_bytes(6));
 }
 
-$twigRenderer = new TwigRenderer(__DIR__ . '/../views');
+// $twigRenderer = new TwigRenderer(__DIR__ . '/../views');
 
 $router = new AltoRouter();
 $router->setBasePath('/blog/public');
@@ -54,7 +50,7 @@ $router->map('GET', '/admin', function () use ($twigRenderer) {
     $session_admin = !empty($_SESSION['USER_ADMIN']) ? $_SESSION['USER_ADMIN'] : null;
 
     // Class instantiation
-    $posts = new AdministratorController(new \blog\repository\AdministratorRepository());
+    $posts = new \blog\controllers\AdministratorController(new \blog\repository\AdministratorRepository());
     $comments = new \blog\controllers\AdministratorController(new \blog\repository\AdministratorRepository());
 
     // Call a controller method
@@ -150,7 +146,7 @@ $router->map(
         $controller = new \blog\controllers\DenyCommentController(
             new \blog\repository\DenyCommentRepository(),
             new \blog\repository\UserRepository(),
-            new PHPMailer(),
+            new \PHPMailer\PHPMailer\PHPMailer(),
             new \blog\service\ValidateService()
         );
 
@@ -333,7 +329,7 @@ $router->map('POST', '/contact', function () use ($twigRenderer) {
     $session_admin = !empty($_SESSION['USER_ADMIN']) ? $_SESSION['USER_ADMIN'] : null;
 
     // Class instantiation
-    $controller = new \blog\controllers\ContactController(new PHPMailer(), new \blog\service\ValidateService());
+    $controller = new \blog\controllers\ContactController(new \PHPMailer\PHPMailer\PHPMailer(), new \blog\service\ValidateService());
 
     // Call a controller method
     $result = $controller->index();
@@ -369,7 +365,7 @@ $router->map('GET', '/all-posts', function () use ($twigRenderer) {
     $session_admin = !empty($_SESSION['USER_ADMIN']) ? $_SESSION['USER_ADMIN'] : null;
 
     // Class instantiation
-    $controller = new AllPostsController(new \blog\repository\AllPostsRepository());
+    $controller = new \blog\controllers\AllPostsController(new \blog\repository\AllPostsRepository());
 
     // Call a controller method
     $posts = $controller->index();
