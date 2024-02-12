@@ -35,9 +35,8 @@ Administrateur :
 - identifiant : admin@admin.com
 - mot de passe : 1234
 
-Se connecter à MailTrap pour voir les emails envoyés :
-- identifiant :
-- mot de passe :
+L'envoie de mails depuis le formulaire de contact de la page d'accueil est actuellement intercepté par la platforme MailTrap.
+Pour tester l'envoie de mails, il faut modifier les informations de connexion dans `contactController.php` avec vos identifiants.
 
 ### Fonctionnalités
 Les principales fonctionnalités du projet accessibles suivant le type d'utilisateur connecté sont :
