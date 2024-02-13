@@ -19,7 +19,7 @@ class AddCommentRepository
         $query = $conn->prepare("INSERT INTO commentaires (date_creation,
                                                             date_modification,
                                                             message,
-                                                            IsChecked,
+                                                            is_checked,
                                                             ID_utilisateur)
                                 VALUES (:date_creation, :date_modification, :message, :IsChecked, :user_id)");
 

@@ -26,14 +26,14 @@ class RegisterRepository
             $result = "Cette adresse mail est déjà utilisée par un autre utilisateur";
         } else {
             $query2 = $conn->prepare("INSERT INTO utilisateurs (nom, prenom, email, password, is_admin)
-                                    VALUES (:nom, :prenom, :email, :password, :statut)");
+                                    VALUES (:nom, :prenom, :email, :password, :is_admin)");
 
 
-            $query->bindValue(':nom', $nom, PDO::PARAM_STR);
-            $query->bindValue(':prenom', $prenom, PDO::PARAM_STR);
-            $query->bindValue(':email', $email, PDO::PARAM_STR);
-            $query->bindValue(':password', $password, PDO::PARAM_STR);
-            $query->bindValue(':statut', Status::visiteur->value);
+            $query2->bindValue(':nom', $nom, PDO::PARAM_STR);
+            $query2->bindValue(':prenom', $prenom, PDO::PARAM_STR);
+            $query2->bindValue(':email', $email, PDO::PARAM_STR);
+            $query2->bindValue(':password', $password, PDO::PARAM_STR);
+            $query2->bindValue(':is_admin', Status::visiteur->value, PDO::PARAM_INT);
 
             if ($query2->execute()) {
                 $id_user = $conn->lastInsertId();

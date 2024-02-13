@@ -2,15 +2,16 @@
 
 session_start();
 
+use PHPMailer\PHPMailer\PHPMailer;
 
-// Inclure l'autoloader Composer
-require '../vendor/autoload.php';
+require_once('../config/twigRenderer.php');
+require_once('../vendor/autoload.php');
 
 if (!isset($_SESSION['TOKEN'])) {
     $_SESSION['TOKEN'] = bin2hex(openssl_random_pseudo_bytes(6));
 }
 
-// $twigRenderer = new TwigRenderer(__DIR__ . '/../views');
+$twigRenderer = new \blog\config\twigRenderer(__DIR__ . '/../views');
 
 $router = new AltoRouter();
 $router->setBasePath('/blog/public');
@@ -18,8 +19,6 @@ $router->setBasePath('/blog/public');
 
                                 /* HOMEPAGE */
 $router->map('GET', '/', function () use ($twigRenderer) {
-    require_once('../config/RequireLoader.php');
-
     $session_token = $_SESSION['TOKEN'];
     $session_id = !empty($_SESSION['USER_ID']) ? $_SESSION['USER_ID'] : null;
     $session_admin = !empty($_SESSION['USER_ADMIN']) ? $_SESSION['USER_ADMIN'] : null;
@@ -41,8 +40,11 @@ $router->map('GET', '/', function () use ($twigRenderer) {
 
                                 /* ADMINISTRATOR */
 $router->map('GET', '/admin', function () use ($twigRenderer) {
-    // require_once('../config/RequireLoader.php');
-    // require_once('../repository/AdministratorRepository.php');
+    require_once('../controllers/AdministratorController.php');
+    require_once('../repository/AdministratorRepository.php');
+    require_once('../Enumeration/IsChecked.php');
+    require_once('../helper/Helper.php');
+    require_once('../config/ConnectDb.php');
 
     // Retrieving the SESSION superglobal variable
     $session_token = $_SESSION['TOKEN'];
@@ -73,7 +75,10 @@ $router->map('GET', '/admin', function () use ($twigRenderer) {
 }, 'administrator');
 
 $router->map('GET', '/admin/validateComment/[i:id]', function ($id) use ($twigRenderer) {
-    require_once('../config/RequireLoader.php');
+    require_once('../controllers/ValidateCommentController.php');
+    require_once('../repository/ValidateCommentRepository.php');
+    require_once('../Enumeration/IsChecked.php');
+    require_once('../config/ConnectDb.php');
 
     // Retrieving the SESSION superglobal variable
     $session_token = $_SESSION['TOKEN'];
@@ -100,7 +105,10 @@ $router->map('GET', '/admin/validateComment/[i:id]', function ($id) use ($twigRe
 }, 'validerComment');
 
 $router->map('GET', '/admin/denyComment/[i:id_comment]', function ($id_comment) use ($twigRenderer) {
-    require_once('../config/RequireLoader.php');
+    require_once('../controllers/CommentController.php');
+    require_once('../repository/commentRepository.php');
+    require_once('../helper/Helper.php');
+    require_once('../config/ConnectDb.php');
 
     // Retrieving the SESSION superglobal variable
     $session_token = $_SESSION['TOKEN'];
@@ -135,7 +143,11 @@ $router->map(
     'POST',
     '/admin/denyComment-confirm/[i:id_comment]-[i:id_user]',
     function ($id_comment, $id_user) use ($twigRenderer) {
-        require_once('../config/RequireLoader.php');
+        require_once('../controllers/DenyCommentController.php');
+        require_once('../repository/denyCommentRepository.php');
+        require_once('../repository/UserRepository.php');
+        require_once('../service/ValidateService.php');
+        require_once('../config/ConnectDb.php');
 
         // Retrieving the SESSION superglobal variable
         $session_token = $_SESSION['TOKEN'];
@@ -146,7 +158,7 @@ $router->map(
         $controller = new \blog\controllers\DenyCommentController(
             new \blog\repository\DenyCommentRepository(),
             new \blog\repository\UserRepository(),
-            new \PHPMailer\PHPMailer\PHPMailer(),
+            new PHPMailer(),
             new \blog\service\ValidateService()
         );
 
@@ -171,8 +183,6 @@ $router->map(
 
                                 /* LOGIN */
 $router->map('GET', '/register', function () use ($twigRenderer) {
-    require_once('../config/RequireLoader.php');
-
     // Retrieving the SESSION superglobal variable
     $session_token = $_SESSION['TOKEN'];
     $session_id = !empty($_SESSION['USER_ID']) ? $_SESSION['USER_ID'] : null;
@@ -196,7 +206,12 @@ $router->map('GET', '/register', function () use ($twigRenderer) {
 
 
 $router->map('POST', '/register-confirm', function () use ($twigRenderer) {
-    require_once('../config/RequireLoader.php');
+    require_once('../controllers/RegisterController.php');
+    require_once('../repository/RegisterRepository.php');
+    require_once('../repository/UserRepository.php');
+    require_once('../service/ValidateService.php');
+    require_once('../Enumeration/Status.php');
+    require_once('../config/ConnectDb.php');
 
     // Retrieving the SESSION superglobal variable
     $session_token = $_SESSION['TOKEN'];
@@ -230,8 +245,6 @@ $router->map('POST', '/register-confirm', function () use ($twigRenderer) {
 
 
 $router->map('GET', '/login', function () use ($twigRenderer) {
-    require_once('../config/RequireLoader.php');
-
     // Retrieving the SESSION superglobal variable
     $session_token = $_SESSION['TOKEN'];
     $session_id = !empty($_SESSION['USER_ID']) ? $_SESSION['USER_ID'] : null;
@@ -254,7 +267,10 @@ $router->map('GET', '/login', function () use ($twigRenderer) {
 
 
 $router->map('POST', '/login-confirm', function () use ($twigRenderer) {
-    require_once('../config/RequireLoader.php');
+    require_once('../controllers/LoginController.php');
+    require_once('../repository/LoginRepository.php');
+    require_once('../service/ValidateService.php');
+    require_once('../config/ConnectDb.php');
 
     // Retrieving the SESSION superglobal variable
     $session_token = $_SESSION['TOKEN'];
@@ -287,8 +303,6 @@ $router->map('POST', '/login-confirm', function () use ($twigRenderer) {
 
 
 $router->map('GET', '/signOut', function () use ($twigRenderer) {
-    require_once('../config/RequireLoader.php');
-
     // Retrieving the SESSION superglobal variable
     $session_token = $_SESSION['TOKEN'];
     $session_id = !empty($_SESSION['USER_ID']) ? $_SESSION['USER_ID'] : null;
@@ -311,8 +325,6 @@ $router->map('GET', '/signOut', function () use ($twigRenderer) {
 
 
 $router->map('POST', '/signOut-confirm', function () use ($twigRenderer) {
-    require_once('../config/RequireLoader.php');
-
     session_destroy();
 
     header("Location: /blog/public/");
@@ -321,7 +333,8 @@ $router->map('POST', '/signOut-confirm', function () use ($twigRenderer) {
 
                                 /* CONTACT */
 $router->map('POST', '/contact', function () use ($twigRenderer) {
-    require_once('../config/RequireLoader.php');
+    require_once('../controllers/ContactController.php');
+    require_once('../service/ValidateService.php');
 
     // Retrieving the SESSION superglobal variable
     $session_token = $_SESSION['TOKEN'];
@@ -329,7 +342,7 @@ $router->map('POST', '/contact', function () use ($twigRenderer) {
     $session_admin = !empty($_SESSION['USER_ADMIN']) ? $_SESSION['USER_ADMIN'] : null;
 
     // Class instantiation
-    $controller = new \blog\controllers\ContactController(new \PHPMailer\PHPMailer\PHPMailer(), new \blog\service\ValidateService());
+    $controller = new \blog\controllers\ContactController(new PHPMailer(), new \blog\service\ValidateService());
 
     // Call a controller method
     $result = $controller->index();
@@ -351,13 +364,10 @@ $router->map('POST', '/contact', function () use ($twigRenderer) {
 
                                 /* POSTS */
 $router->map('GET', '/all-posts', function () use ($twigRenderer) {
-    require_once('../config/RequireLoader.php');
-    require('../controllers/AllPostsController.php');
-    require('../repository/allPostsRepository.php');
-    require('../config/ConnectDb.php');
-    require('../helper/helper.php');
-
-    
+    require_once('../controllers/AllPostsController.php');
+    require_once('../repository/allPostsRepository.php');
+    require_once('../helper/Helper.php');
+    require_once('../config/ConnectDb.php');
 
     // Retrieving the SESSION superglobal variable
     $session_token = $_SESSION['TOKEN'];
@@ -387,7 +397,13 @@ $router->map('GET', '/all-posts', function () use ($twigRenderer) {
 
 
 $router->map('GET', '/post/[i:id]', function ($id) use ($twigRenderer) {
-    require_once('../config/RequireLoader.php');
+    require_once('../controllers/PostController.php');
+    require_once('../controllers/CommentController.php');
+    require_once('../repository/PostRepository.php');
+    require_once('../repository/commentRepository.php');
+    require_once('../helper/Helper.php');
+    require_once('../Enumeration/IsChecked.php');
+    require_once('../config/ConnectDb.php');
 
     // Retrieving the SESSION superglobal variable
     $session_token = $_SESSION['TOKEN'];
@@ -420,8 +436,6 @@ $router->map('GET', '/post/[i:id]', function ($id) use ($twigRenderer) {
 
 
 $router->map('GET', '/add-post', function () use ($twigRenderer) {
-    require_once('../config/RequireLoader.php');
-
     // Retrieving the SESSION superglobal variable
     $session_token = $_SESSION['TOKEN'];
     $session_id = !empty($_SESSION['USER_ID']) ? $_SESSION['USER_ID'] : null;
@@ -444,7 +458,10 @@ $router->map('GET', '/add-post', function () use ($twigRenderer) {
 
 
 $router->map('POST', '/add-post-confirm', function () use ($twigRenderer) {
-    require_once('../config/RequireLoader.php');
+    require_once('../controllers/AddPostController.php');
+    require_once('../repository/AddPostRepository.php');
+    require_once('../service/ValidateService.php');
+    require_once('../config/ConnectDb.php');
 
     // Retrieving the SESSION superglobal variable
     $session_token = $_SESSION['TOKEN'];
@@ -477,7 +494,10 @@ $router->map('POST', '/add-post-confirm', function () use ($twigRenderer) {
 
 
 $router->map('GET', '/modify-post/[i:id]', function ($id) use ($twigRenderer) {
-    require_once('../config/RequireLoader.php');
+    require_once('../controllers/PostController.php');
+    require_once('../repository/PostRepository.php');
+    require_once('../helper/Helper.php');
+    require_once('../config/ConnectDb.php');
 
     // Retrieving the SESSION superglobal variable
     $session_token = $_SESSION['TOKEN'];
@@ -507,7 +527,10 @@ $router->map('GET', '/modify-post/[i:id]', function ($id) use ($twigRenderer) {
 
 
 $router->map('POST', '/modify-post-confirm/[i:id]', function ($id) use ($twigRenderer) {
-    require_once('../config/RequireLoader.php');
+    require_once('../controllers/ModifyPostController.php');
+    require_once('../repository/ModifyPostRepository.php');
+    require_once('../service/ValidateService.php');
+    require_once('../config/ConnectDb.php');
 
     // Retrieving the SESSION superglobal variable
     $session_token = $_SESSION['TOKEN'];
@@ -540,7 +563,10 @@ $router->map('POST', '/modify-post-confirm/[i:id]', function ($id) use ($twigRen
 
 
 $router->map('GET', '/delete-post/[i:id]', function ($id) use ($twigRenderer) {
-    require_once('../config/RequireLoader.php');
+    require_once('../controllers/PostController.php');
+    require_once('../repository/PostRepository.php');
+    require_once('../helper/Helper.php');
+    require_once('../config/ConnectDb.php');
 
     // Retrieving the SESSION superglobal variable
     $session_token = $_SESSION['TOKEN'];
@@ -570,7 +596,9 @@ $router->map('GET', '/delete-post/[i:id]', function ($id) use ($twigRenderer) {
 
 
 $router->map('POST', '/delete-post-confirm/[i:id]', function ($id) use ($twigRenderer) {
-    require_once('../config/RequireLoader.php');
+    require_once('../controllers/DeletePostController.php');
+    require_once('../repository/deletePostRepository.php');
+    require_once('../config/ConnectDb.php');
 
     // Retrieving the SESSION superglobal variable
     $session_token = $_SESSION['TOKEN'];
@@ -600,7 +628,11 @@ $router->map('POST', '/delete-post-confirm/[i:id]', function ($id) use ($twigRen
 
                                     /* COMMENT */
 $router->map('POST', '/add-comment/[i:id]', function ($id) use ($twigRenderer) {
-    require_once('../config/RequireLoader.php');
+    require_once('../controllers/AddCommentController.php');
+    require_once('../repository/AddCommentRepository.php');
+    require_once('../service/ValidateService.php');
+    require_once('../Enumeration/IsChecked.php');
+    require_once('../config/ConnectDb.php');
 
     // Retrieving the SESSION superglobal variable
     $session_token = $_SESSION['TOKEN'];
@@ -633,7 +665,13 @@ $router->map('POST', '/add-comment/[i:id]', function ($id) use ($twigRenderer) {
 
 
 $router->map('GET', '/modify-comment/[i:id_post]-[i:id_comment]', function ($id_post, $id_comment) use ($twigRenderer) {
-    require_once('../config/RequireLoader.php');
+    require_once('../controllers/PostController.php');
+    require_once('../controllers/CommentController.php');
+    require_once('../repository/PostRepository.php');
+    require_once('../repository/CommentRepository.php');
+    require_once('../Enumeration/IsChecked.php');
+    require_once('../helper/Helper.php');
+    require_once('../config/ConnectDb.php');
 
     // Retrieving the SESSION superglobal variable
     $session_token = $_SESSION['TOKEN'];
@@ -673,7 +711,11 @@ $router->map(
     'POST',
     '/modify-comment-confirm/[i:id_post]-[i:id_comment]',
     function ($id_post, $id_comment) use ($twigRenderer) {
-        require_once('../config/RequireLoader.php');
+        require_once('../controllers/ModifyCommentController.php');
+        require_once('../repository/ModifyCommentRepository.php');
+        require_once('../service/ValidateService.php');
+        require_once('../Enumeration/IsChecked.php');
+        require_once('../config/ConnectDb.php');
 
     // Retrieving the SESSION superglobal variable
         $session_token = $_SESSION['TOKEN'];
@@ -708,7 +750,12 @@ $router->map(
 
 
 $router->map('GET', '/delete-comment/[i:id_post]-[i:id_comment]', function ($id_post, $id_comment) use ($twigRenderer) {
-    require_once('../config/RequireLoader.php');
+    require_once('../controllers/PostController.php');
+    require_once('../controllers/CommentController.php');
+    require_once('../repository/PostRepository.php');
+    require_once('../repository/CommentRepository.php');
+    require_once('../helper/Helper.php');
+    require_once('../config/ConnectDb.php');
 
     // Retrieving the SESSION superglobal variable
     $session_token = $_SESSION['TOKEN'];
@@ -745,7 +792,10 @@ $router->map(
     'POST',
     '/delete-comment-confirm/[i:id_post]-[i:id_comment]',
     function ($id_post, $id_comment) use ($twigRenderer) {
-        require_once('../config/RequireLoader.php');
+        require_once('../controllers/DeleteCommentController.php');
+        require_once('../repository/deleteCommentRepository.php');
+        require_once('../service/ValidateService.php');
+        require_once('../config/ConnectDb.php');
 
     // Retrieving the SESSION superglobal variable
         $session_token = $_SESSION['TOKEN'];
